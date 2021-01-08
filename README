@@ -2,3 +2,6 @@ Note to self:
 
 All driver-specific functions should only deal with outputting stuff to the screen,
 let other stuff be handled by the interfaces in common.c
+
+This is basically a rewrite of https://github.com/erratic-c-programmer/libascii because that code was
+not very good. At all.
