@@ -44,9 +44,10 @@ DRIVERS = drivers/common.o drivers/vt100.o drivers/xterm.o
 RENDER = render/render.o
 MISC = global.o
 ALLOBJ = $(INIT) $(DRIVERS) $(RENDER) $(MISC)
-ALLBIN = $(ALLOBJ) test/spinner $(BUILDDIR)/libascii.a
+TESTS = tests/spinner
+ALLBIN = $(ALLOBJ) $(TESTS) $(BUILDDIR)/libascii.a
 
-all : __MKDIR__ $(BUILDDIR)/libascii.a libmds-ng/libmds.so tests/spinner
+all : __MKDIR__ $(BUILDDIR)/libascii.a libmds-ng/libmds.so test
 
 $(BUILDDIR)/libascii.a : $(DRIVERS) $(INIT) $(MISC) $(RENDER)
 	$V printf "Creating static library \033[1m$@\033[0m...\n"
@@ -56,8 +57,12 @@ $(BUILDDIR)/libascii.a : $(DRIVERS) $(INIT) $(MISC) $(RENDER)
 	$V printf "Compiling \033[1m$@\033[0m from $^...\n"
 	$V $(CC) $(CFLAGS) -c $^
 
-tests/% : tests/%.c libascii.a libmds-ng/libmds.so
-	$V printf "Compiling \033[1m$@\033[0m from $<...\n"
+###
+
+test : $(TESTS)
+
+tests/% : tests/%.c $(BUILDDIR)/libascii.a libmds-ng/libmds.so
+	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
 	$V $(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBFLAGS)
 
 libmds-ng/libmds.so : libmds-ng
