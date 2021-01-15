@@ -31,7 +31,7 @@ WARNINGS += -Werror
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR) -Ilibmds-ng/include
-LDFLAGS = -Wl,-rpath libmds-ng -Wl,-rpath .
+LDFLAGS = -Wl,-rpath libmds-ng -Wl,-rpath build
 LIBFLAGS = -Lbuild -Llibmds-ng -lmds -lascii
 CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -o $@
 
@@ -43,12 +43,10 @@ INIT = init/init.o
 DRIVERS = drivers/common.o drivers/vt100.o drivers/xterm.o
 RENDER = render/render.o
 MISC = global.o
+ALLOBJ = $(INIT) $(DRIVERS) $(RENDER) $(MISC)
+ALLBIN = $(ALLOBJ) test/spinner $(BUILDDIR)/libascii.a
 
-all : __MKDIR__ tests $(BUILDDIR)/libascii.a
-
-tests : tests/spinner
-
-tests/spinner : tests/spinner.c $(BUILDDIR)/libascii.a libmds-ng/libmds.so
+all : __MKDIR__ $(BUILDDIR)/libascii.a libmds-ng/libmds.so tests/spinner
 
 $(BUILDDIR)/libascii.a : $(DRIVERS) $(INIT) $(MISC) $(RENDER)
 	$V printf "Creating static library \033[1m$@\033[0m...\n"
@@ -58,9 +56,17 @@ $(BUILDDIR)/libascii.a : $(DRIVERS) $(INIT) $(MISC) $(RENDER)
 	$V printf "Compiling \033[1m$@\033[0m from $^...\n"
 	$V $(CC) $(CFLAGS) -c $^
 
-% : %.c
-	$V printf "Compiling \033[1m$@\033[0m from $^...\n"
-	$V $(CC) $(CFLAGS) $(LDFLAGS) $^ $(LIBFLAGS)
+tests/% : tests/%.c libascii.a libmds-ng/libmds.so
+	$V printf "Compiling \033[1m$@\033[0m from $<...\n"
+	$V $(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBFLAGS)
+
+libmds-ng/libmds.so : libmds-ng
+	$V (cd $<; $(MAKE))
+
+clean : __FORCE__
+	$V rm -f $(ALLBIN)
+	$V make -Clibmds-ng cleanproper
+	$V echo Clean
 
 __MKDIR__ : __FORCE__
 	$V mkdir -p $(BUILDDIR)
