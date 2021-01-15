@@ -19,16 +19,16 @@
  * SCR_OOB - Co-ordinates are out-of-bounds
  */
 enum la_status {
-	LASCII_OK = 0,
-	LASCII_SCR_OOB,
-	LASCII_ALLOC_FAIL
+    LASCII_OK = 0,
+    LASCII_SCR_OOB,
+    LASCII_ALLOC_FAIL
 };
 
 /* Enum: driver_type
  * Enumerates driver types
  */
 enum driver_t {
-	VT100 = 1
+    VT100 = 1
 };
 
 /*
@@ -37,36 +37,36 @@ enum driver_t {
  * This should be pretty self-explanatory
  */
 struct screen_coord {
-	short row;
-	short col;
+    short row;
+    short col;
 };
 
 struct la_state {
-	/* Lower-level */
-	enum driver_t driver;
-	struct string buf;
-	struct screen_coord curs_pos;
-	struct winsize scr_size;
-	struct termios orig_termios;
-	struct termios raw_termios;
+    /* Lower-level */
+    enum driver_t driver;
+    struct string buf;
+    struct screen_coord curs_pos;
+    struct winsize scr_size;
+    struct termios orig_termios;
+    struct termios raw_termios;
 
-	/* Function pointers to the appropriate driver-specific function */
-	void (*ll_curs_mov)(const struct screen_coord);
-	void (*ll_curs_vis)(void);
-	void (*ll_curs_invis)(void);
-	void (*ll_scr_clear)(void);
-	void (*ll_ln_clear)(void);
-	void (*ll_alt_scr_on)(void);
-	void (*ll_alt_scr_off)(void);
+    /* Function pointers to the appropriate driver-specific function */
+    void (*ll_curs_mov)(const struct screen_coord);
+    void (*ll_curs_vis)(void);
+    void (*ll_curs_invis)(void);
+    void (*ll_scr_clear)(void);
+    void (*ll_ln_clear)(void);
+    void (*ll_alt_scr_on)(void);
+    void (*ll_alt_scr_off)(void);
 
-	/**/
+    /**/
 
-	/* Renderer */
-	struct screen_coord rr_curs_pos;
-	char **rr_curframe; /* To be rendered next */
-	char **rr_oldframe;
-	bool **rr_update_cell_p;
-	bool rr_curs_vis_p;
+    /* Renderer */
+    struct screen_coord rr_curs_pos;
+    char **rr_curframe; /* To be rendered next */
+    char **rr_oldframe;
+    bool **rr_update_cell_p;
+    bool rr_curs_vis_p;
 };
 
 extern struct la_state *_la_state;
