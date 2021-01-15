@@ -4,7 +4,9 @@
 
 enum la_status ll_buf_append(const char *in)
 {
-    if (string_append(&_la_state->buf, in) == LMDS_ALLOC_FAIL) { return LASCII_ALLOC_FAIL; }
+    if (string_append(&_la_state->buf, in) == LMDS_ALLOC_FAIL) {
+        return LASCII_ALLOC_FAIL;
+    }
     return LASCII_OK;
 }
 
@@ -29,7 +31,9 @@ void ll_buf_write(void)
 
 enum la_status ll_curs_mov(const struct screen_coord pos)
 {
-    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB) { return LASCII_SCR_OOB; }
+    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB) {
+        return LASCII_SCR_OOB;
+    }
     _la_state->ll_curs_mov(pos);
     _la_state->curs_pos = (struct screen_coord){1, 1};
     return LASCII_OK;

@@ -4,13 +4,17 @@ enum la_status lascii_init(void)
 {
     /* Memory init */
     _la_state = malloc(sizeof(struct la_state));
-    if (_la_state == NULL) { return LASCII_ALLOC_FAIL; }
+    if (_la_state == NULL) {
+        return LASCII_ALLOC_FAIL;
+    }
 
     /* Get window size */
     _la_state->scr_size = ll_scr_getsize();
 
     /* More memory init */
-    if (string_init(&_la_state->buf) == LMDS_ALLOC_FAIL) { return LASCII_ALLOC_FAIL; }
+    if (string_init(&_la_state->buf) == LMDS_ALLOC_FAIL) {
+        return LASCII_ALLOC_FAIL;
+    }
     /* For the renderer */
     _la_state->rr_curframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
     _la_state->rr_oldframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
