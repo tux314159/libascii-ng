@@ -36,6 +36,18 @@ enum la_status rr_scr_putc(const char in, const struct screen_coord pos)
     return LASCII_OK;
 }
 
+enum la_status rr_scr_puts(const char *in, const int len, const struct screen_coord pos)
+{
+    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB || ll_scr_coords_check(pos) + len == LASCII_SCR_OOB) {
+        return LASCII_SCR_OOB;
+    }
+    
+    for (int i = 0; i < len; i++) {
+        rr_scr_putc(*(in + i), (struct screen_coord){pos.row, pos.col + i});
+    }
+    return LASCII_OK;
+}
+
 void rr_scr_render(void)
 {
     ll_buf_clear();

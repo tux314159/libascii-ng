@@ -28,7 +28,7 @@ void rr_curs_invis(void);
 
 /*
  * Function: rr_scr_putc
- * Writes a character code to a cell in the screen
+ * Writes a character code to a cell on the screen
  *
  * Parameters:
  *  in - what character sequence to write
@@ -38,6 +38,19 @@ void rr_curs_invis(void);
  *  <la_status>
  */
 enum la_status rr_scr_putc(const char in, const struct screen_coord pos);
+
+/*
+ * Function: rr_scr_puts
+ * Writes a string from a cell on the screen
+ *
+ * Parameters:
+ *  in - what character sequence to write
+ *  pos - where to write it
+ *
+ * Returns:
+ *  <la_status>
+ */
+enum la_status rr_scr_puts(const char *in, const int len, const struct screen_coord pos);
 
 /*
  * Function: rr_scr_render
