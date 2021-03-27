@@ -27,9 +27,7 @@ enum la_status rr_scr_putc(const char in, const struct screen_coord pos)
         return LASCII_SCR_OOB;
     }
 
-    if (_la_state->rr_curframe[pos.row-1][pos.col-1] == _la_state->rr_oldframe[pos.row-1][pos.col-1]) {
-        _la_state->rr_update_cell_p[pos.row-1][pos.col-1] = false;
-    } else {
+    if (in != _la_state->rr_oldframe[pos.row-1][pos.col-1]) {
         _la_state->rr_curframe[pos.row-1][pos.col-1] = in;
         _la_state->rr_update_cell_p[pos.row-1][pos.col-1] = true;
     }
