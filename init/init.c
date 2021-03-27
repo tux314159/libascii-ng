@@ -65,6 +65,7 @@ void lascii_deinit(void)
 {
     /* Reset screen */
     ll_alt_scr_off();
+    ll_curs_vis();
     ll_buf_write();
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_la_state->orig_termios);
 
