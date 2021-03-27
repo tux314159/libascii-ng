@@ -44,7 +44,7 @@ DRIVERS = drivers/common.o drivers/vt100.o drivers/xterm.o
 RENDER = render/render.o
 MISC = global.o
 ALLOBJ = $(INIT) $(DRIVERS) $(RENDER) $(MISC)
-TESTS = tests/spinner
+TESTS = tests/test1 tests/test2
 ALLBIN = $(ALLOBJ) $(TESTS) $(BUILDDIR)/libascii.a
 
 all : __MKDIR__ $(BUILDDIR)/libascii.a libmds-ng/libmds.so test
