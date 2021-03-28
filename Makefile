@@ -44,7 +44,7 @@ DRIVERS = drivers/common.o drivers/vt100.o drivers/xterm.o
 RENDER = render/render.o
 MISC = global.o
 ALLOBJ = $(INIT) $(DRIVERS) $(RENDER) $(MISC)
-TESTS = tests/test1 tests/test2
+TESTS = tests/build/test1 tests/build/test2
 ALLBIN = $(ALLOBJ) $(TESTS) $(BUILDDIR)/libascii.a
 
 all : __MKDIR__ $(BUILDDIR)/libascii.a libmds-ng/libmds.so test
@@ -61,7 +61,7 @@ $(BUILDDIR)/libascii.a : $(DRIVERS) $(INIT) $(MISC) $(RENDER)
 
 test : $(TESTS)
 
-tests/% : tests/%.c $(BUILDDIR)/libascii.a libmds-ng/libmds.so
+tests/build/% : tests/%.c $(BUILDDIR)/libascii.a libmds-ng/libmds.so
 	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
 	$V $(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBFLAGS)
 

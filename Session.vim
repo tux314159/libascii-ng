@@ -16,7 +16,7 @@ badd +29 include/drivers/common.h
 badd +25 render/render.c
 badd +72 drivers/common.c
 badd +1 init
-badd +0 init/init.c
+badd +1 init/init.c
 argglobal
 %argdel
 $argadd tests/testinput.c
@@ -89,12 +89,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 22 - ((21 * winheight(0) + 27) / 55)
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-22
-normal! 069|
+1
+normal! 0
 lcd ~/Devel/libascii-ng
 tabedit ~/Devel/libascii-ng/init/init.c
 set splitbelow splitright
@@ -113,12 +113,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+let s:l = 68 - ((37 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+68
+normal! 018|
 lcd ~/Devel/libascii-ng
 tabnext 3
 set stal=1

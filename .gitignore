@@ -2,4 +2,5 @@
 build/
 .cache
 compile_commands.json
-tests/spinner
+tests/build
+Session.vim
