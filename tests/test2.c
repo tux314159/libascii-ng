@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <base.h>
-#include <init/init.h>
-#include <render/render.h>
+#include <init.h>
+#include <render.h>
 #include <drivers/vt100.h>
 
 char x;

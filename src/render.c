@@ -1,4 +1,4 @@
-#include <render/render.h>
+#include <render.h>
 
 enum la_status rr_curs_mov(const struct screen_coord pos)
 {

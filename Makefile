@@ -30,8 +30,8 @@ WARNINGS += -Werror
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR) -Ilibmds-ng/include
-LDFLAGS = -Wl,-rpath libmds-ng -Wl,-rpath build
-LIBFLAGS = -Lbuild -Llibmds-ng -lmds -lascii
+LDFLAGS = -Wl,-rpath libmds-ng -Wl,-rpath .
+LIBFLAGS = -L. -Llibmds-ng -lmds -lascii
 CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -o $@
 
 CC = gcc
@@ -49,6 +49,8 @@ OBJECTS = $(foreach curfile,$(SOURCES),$(basename $(curfile)).o)
 
 TESTS = tests/build/test1 tests/build/test2
 
+.SUFFIXES :
+
 all : libascii.a libmds-ng/libmds.so test
 
 libascii.a : $(OBJECTS)
@@ -56,14 +58,14 @@ libascii.a : $(OBJECTS)
 	$V $(AR) $^
 
 %.o : %.c
-	$V printf "Compiling \033[1m$(notdir $@)\033[0m from $(notdir $^)...\n"
+	$V printf "Compiling \033[1m$(notdir $@)\033[0m from $(notdir $<)...\n"
 	$V $(CC) $(CFLAGS) -c $^
 
 ###
 
 test : $(TESTS)
 
-tests/build/% : tests/%.c $(BUILDDIR)/libascii.a libmds-ng/libmds.so
+tests/build/% : tests/%.c libascii.a libmds-ng/libmds.so
 	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
 	$V $(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBFLAGS)
 
@@ -72,6 +74,7 @@ libmds-ng/libmds.so : libmds-ng
 
 clean : __FORCE__
 	$V rm -f $(OBJECTS)
+	$V rm -f $(TESTS)
 	$V $(MAKE) -Clibmds-ng cleanproper
 	$V echo Clean
 

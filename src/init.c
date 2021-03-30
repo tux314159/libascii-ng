@@ -1,4 +1,4 @@
-#include <init/init.h>
+#include <init.h>
 
 enum la_status lascii_init(void)
 {
