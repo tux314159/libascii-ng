@@ -18,8 +18,8 @@ int main(void)
     x = ll_stdin_getchar();
     sprintf(s, "You pressed the key '%c'.", x);
     //rr_scr_putc(x, (struct screen_coord){1, 1});
-    rr_scr_puts(s, strlen(s), (struct screen_coord){1, 1});
-    rr_scr_puts("Press any key to exit.", 22, (struct screen_coord){2, 1});
+    rr_scr_puts(s, (struct screen_coord){1, 1});
+    rr_scr_puts("Press any key to exit.", (struct screen_coord){2, 1});
     rr_scr_render();
 
     ll_stdin_getchar();

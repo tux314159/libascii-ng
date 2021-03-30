@@ -1,6 +1,8 @@
 #ifndef RENDER_H
 #define RENDER_H
 
+#include <string.h>
+
 #include <base.h>
 #include <drivers/common.h>
 
@@ -50,7 +52,7 @@ enum la_status rr_scr_putc(const char in, const struct screen_coord pos);
  * Returns:
  *  <la_status>
  */
-enum la_status rr_scr_puts(const char *in, const int len, const struct screen_coord pos);
+enum la_status rr_scr_puts(const char *in, const struct screen_coord pos);
 
 /*
  * Function: rr_scr_render
