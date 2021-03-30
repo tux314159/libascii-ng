@@ -1,4 +1,3 @@
-BUILDDIR = build
 HEADERDIR = include
 
 V = @
@@ -38,23 +37,26 @@ CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -o $@
 CC = gcc
 AR = ar rcs $@
 
-# Object file list
-INIT = init/init.o
-DRIVERS = drivers/common.o drivers/vt100.o drivers/xterm.o
-RENDER = render/render.o
-MISC = global.o
-ALLOBJ = $(INIT) $(DRIVERS) $(RENDER) $(MISC)
+# Source file list
+SOURCES += src/init.c
+SOURCES += src/render.c
+SOURCES += src/drivers/common.c
+SOURCES += src/drivers/xterm.c
+SOURCES += src/drivers/vt100.c
+SOURCES += src/global.c
+
+OBJECTS = $(foreach curfile,$(SOURCES),$(basename $(curfile)).o)
+
 TESTS = tests/build/test1 tests/build/test2
-ALLBIN = $(ALLOBJ) $(TESTS) $(BUILDDIR)/libascii.a
 
-all : __MKDIR__ $(BUILDDIR)/libascii.a libmds-ng/libmds.so test
+all : libascii.a libmds-ng/libmds.so test
 
-$(BUILDDIR)/libascii.a : $(DRIVERS) $(INIT) $(MISC) $(RENDER)
+libascii.a : $(OBJECTS)
 	$V printf "Creating static library \033[1m$@\033[0m...\n"
 	$V $(AR) $^
 
 %.o : %.c
-	$V printf "Compiling \033[1m$@\033[0m from $^...\n"
+	$V printf "Compiling \033[1m$(notdir $@)\033[0m from $(notdir $^)...\n"
 	$V $(CC) $(CFLAGS) -c $^
 
 ###
@@ -69,11 +71,8 @@ libmds-ng/libmds.so : libmds-ng
 	$V (cd $<; $(MAKE))
 
 clean : __FORCE__
-	$V rm -f $(ALLBIN)
-	$V make -Clibmds-ng cleanproper
+	$V rm -f $(OBJECTS)
+	$V $(MAKE) -Clibmds-ng cleanproper
 	$V echo Clean
-
-__MKDIR__ : __FORCE__
-	$V mkdir -p $(BUILDDIR)
 
 __FORCE__ :
