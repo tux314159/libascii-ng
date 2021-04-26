@@ -10,8 +10,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <dstring.h>
-
 /* Enum: la_status
  * Enumerates the return values of functions
  *
@@ -44,7 +42,7 @@ struct screen_coord {
 struct la_state {
     /* Lower-level */
     enum driver_t driver;
-    struct string buf;
+    char *buf;
     struct screen_coord curs_pos;
     struct winsize scr_size;
     struct termios orig_termios;

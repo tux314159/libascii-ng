@@ -12,9 +12,7 @@ enum la_status lascii_init(void)
     _la_state->scr_size = ll_scr_getsize();
 
     /* More memory init */
-    if (string_init(&_la_state->buf) == LMDS_ALLOC_FAIL) {
-        return LASCII_ALLOC_FAIL;
-    }
+    _la_state->buf = malloc(0);
     /* For the renderer */
     _la_state->rr_curframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
     _la_state->rr_oldframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
@@ -79,7 +77,7 @@ void lascii_deinit(void)
     free(_la_state->rr_oldframe);
     free(_la_state->rr_update_cell_p);
     /**/
-    string_deinit(&_la_state->buf);
+    free(_la_state->buf);
     free(_la_state);
 
     return;
