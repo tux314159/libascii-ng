@@ -3,7 +3,7 @@
 enum la_status lascii_init(void)
 {
     /* Memory init */
-    _la_state = malloc(sizeof(struct la_state));
+    _la_state = calloc(sizeof(struct la_state), 1);
     if (_la_state == NULL) {
         return LASCII_ALLOC_FAIL;
     }
@@ -12,7 +12,8 @@ enum la_status lascii_init(void)
     _la_state->scr_size = ll_scr_getsize();
 
     /* More memory init */
-    _la_state->buf = malloc(0);
+    RETIFNOK(string_init(&_la_state->buf));
+
     /* For the renderer */
     _la_state->rr_curframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
     _la_state->rr_oldframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
@@ -77,7 +78,7 @@ void lascii_deinit(void)
     free(_la_state->rr_oldframe);
     free(_la_state->rr_update_cell_p);
     /**/
-    free(_la_state->buf);
+    string_deinit(&_la_state->buf);
     free(_la_state);
 
     return;

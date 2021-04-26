@@ -2,7 +2,6 @@
 #define COMMON_H
 
 #include <base.h>
-#include <dstring.h>
 
 /* OUTPUT */
 

@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <status.h>
 
 /* Struct: string
@@ -40,9 +39,9 @@ struct string {
  *  in - string to operate on
  *
  * Returns:
- *  <lmds_status>
+ *  <la_status>
  */
-enum lmds_status string_init(struct string *in);
+enum la_status string_init(struct string *in);
 
 /* Function: string_deinit
  * De-initialises a string
@@ -51,9 +50,9 @@ enum lmds_status string_init(struct string *in);
  *  in - string to operate on
  *
  * Returns:
- *  <lmds_status>
+ *  <la_status>
  */
-enum lmds_status string_deinit(struct string *in);
+enum la_status string_deinit(struct string *in);
 
 /* Function: string_grow
  * Grows a string
@@ -63,13 +62,13 @@ enum lmds_status string_deinit(struct string *in);
  *  add - how many characters to grow by
  *
  * Returns:
- *  <lmds_status>
+ *  <la_status>
  *
  * Note:
  *  The new space will be uninitialised, save for the final
  *  NULL byte.
  */
-enum lmds_status string_grow(struct string *in, const size_t add);
+enum la_status string_grow(struct string *in, const size_t add);
 
 /* Function: string_append
  * Appends a C char array to a string
@@ -78,12 +77,12 @@ enum lmds_status string_grow(struct string *in, const size_t add);
  *  str - char array to append
  *
  * Returns:
- *  <lmds_status>
+ *  <la_status>
  *
  * Note:
  *  str must be NULL-terminated.
  */
-enum lmds_status string_append(struct string *in, const char *str);
+enum la_status string_append(struct string *in, const char *str);
 
 /* Function: string_insert
  * Inserts a C char array in a string _at_ the specified index.
@@ -94,12 +93,12 @@ enum lmds_status string_append(struct string *in, const char *str);
  *  str - char array to insert
  *
  * Returns:
- *  <lmds_status>
+ *  <la_status>
  *
  * Note:
  *  str must be NULL-terminated.
  */
-enum lmds_status string_insert(struct string *in, const size_t idx, const char *str);
+enum la_status string_insert(struct string *in, const size_t idx, const char *str);
 
 /* Function: string_delete
  * Deletes characters from start to end inclusively.
@@ -109,8 +108,8 @@ enum lmds_status string_insert(struct string *in, const size_t idx, const char *
  *  end - index to stop deleting at
  *
  * Returns:
- *  <lmds_status>
+ *  <la_status>
  */
-enum lmds_status string_delete(struct string *in, const size_t start, const size_t end);
+enum la_status string_delete(struct string *in, const size_t start, const size_t end);
 
 #endif /* DSTRING_H */

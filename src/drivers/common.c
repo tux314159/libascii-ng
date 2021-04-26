@@ -4,7 +4,7 @@
 
 enum la_status ll_buf_append(const char *in)
 {
-    if (string_append(&_la_state->buf, in) == LMDS_ALLOC_FAIL) {
+    if (string_append(&_la_state->buf, in) == LASCII_ALLOC_FAIL) {
         return LASCII_ALLOC_FAIL;
     }
     return LASCII_OK;

@@ -10,17 +10,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-/* Enum: la_status
- * Enumerates the return values of functions
- *
- * OK - OK
- * SCR_OOB - Co-ordinates are out-of-bounds
- */
-enum la_status {
-    LASCII_OK = 0,
-    LASCII_SCR_OOB,
-    LASCII_ALLOC_FAIL
-};
+#include <status.h>
+#include <dstring.h>
 
 /* Enum: driver_type
  * Enumerates driver types
@@ -42,7 +33,7 @@ struct screen_coord {
 struct la_state {
     /* Lower-level */
     enum driver_t driver;
-    char *buf;
+    struct string buf;
     struct screen_coord curs_pos;
     struct winsize scr_size;
     struct termios orig_termios;
