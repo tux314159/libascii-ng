@@ -4,6 +4,7 @@
 #include <init.h>
 #include <render.h>
 #include <drivers/vt100.h>
+#include <io_toplevel.h>
 
 char x;
 char s[100];
@@ -15,7 +16,7 @@ int main(void)
     rr_curs_invis();
     rr_scr_render();
 
-    x = ll_stdin_getchar();
+    x = iot_getchar();
     sprintf(s, "You pressed the key '%c'.", x);
     //rr_scr_putc(x, (struct screen_coord){1, 1});
     rr_scr_puts(s, (struct screen_coord){1, 1});

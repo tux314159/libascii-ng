@@ -1,14 +1,5 @@
-/*
- * File: common.h
- * Contains lower-level functions, which should only
- * be used if you don't use the higher-level systems
- * (e.g windowing)
- */
-
 #ifndef COMMON_H
 #define COMMON_H
-
-#include <unistd.h>
 
 #include <base.h>
 #include <dstring.h>
