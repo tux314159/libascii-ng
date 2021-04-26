@@ -30,7 +30,6 @@ WARNINGS += -Werror
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR) -Ilibmds-ng/include
-LDFLAGS = -Wl,-rpath libmds-ng -Wl,-rpath .
 LIBFLAGS = -L. -Llibmds-ng -lmds -lascii
 CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -o $@
 
@@ -52,7 +51,7 @@ TESTS = tests/build/test1 tests/build/test2
 
 .SUFFIXES :
 
-all : libascii.a libmds-ng/libmds.so test
+all : libascii.a libmds-ng/libmds.a test
 
 libascii.a : $(OBJECTS)
 	$V printf "Creating static library \033[1m$@\033[0m...\n"
@@ -66,11 +65,11 @@ libascii.a : $(OBJECTS)
 
 test : $(TESTS)
 
-tests/build/% : tests/%.c libascii.a libmds-ng/libmds.so
+tests/build/% : tests/%.c libascii.a libmds-ng/libmds.a
 	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
 	$V $(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBFLAGS)
 
-libmds-ng/libmds.so : libmds-ng
+libmds-ng/libmds.a : libmds-ng
 	$V (cd $<; $(MAKE))
 
 clean : __FORCE__
