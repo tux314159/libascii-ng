@@ -60,6 +60,12 @@ void ll_curs_invis(void);
 void ll_curs_vis(void);
 
 /*
+ * Function: ll_scr_clear
+ * Clears the screen
+ */
+void ll_scr_clear(void);
+
+/*
  * Function: ll_scr_getsize
  * Gets the screen size
  *

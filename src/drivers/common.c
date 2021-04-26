@@ -51,6 +51,12 @@ void ll_curs_vis(void)
     return;
 }
 
+void ll_scr_clear(void)
+{
+    _la_state->ll_scr_clear();
+    return;
+}
+
 struct winsize ll_scr_getsize(void)
 {
     /* TODO: Maybe make this less platform-specific?
