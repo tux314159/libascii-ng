@@ -2,7 +2,6 @@
 #define RENDER_H
 
 #include <string.h>
-
 #include <base.h>
 #include <drivers/common.h>
 
@@ -43,11 +42,11 @@ enum la_status rr_scr_putc(const char in, const struct screen_coord pos);
 
 /*
  * Function: rr_scr_puts
- * Writes a string from a cell on the screen
+ * Writes a string to the screen
  *
  * Parameters:
  *  in - what character sequence to write
- *  pos - where to write it
+ *  pos - where to write it (from the first character)
  *
  * Returns:
  *  <la_status>

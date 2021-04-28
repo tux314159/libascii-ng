@@ -43,7 +43,6 @@ SOURCES += src/drivers/common.c
 SOURCES += src/drivers/xterm.c
 SOURCES += src/drivers/vt100.c
 SOURCES += src/global.c
-SOURCES += src/io_toplevel.c
 SOURCES += src/dstring.c
 
 OBJECTS = $(foreach curfile,$(SOURCES),$(basename $(curfile)).o)
