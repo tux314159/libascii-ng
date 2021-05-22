@@ -4,7 +4,7 @@ void vt100_curs_mov(const struct screen_coord pos)
 {
     char buf[16];
     memset(buf, '\0', 16 * sizeof(char));
-    sprintf(buf, "\x1b[%hd;%hdH", pos.row, pos.col);
+    sprintf(buf, "\x1b[%hd;%hdH", (short)(pos.y + 1), (short)(pos.x + 1));
     ll_buf_append(buf);
     return;
 }

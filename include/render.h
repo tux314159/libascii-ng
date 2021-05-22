@@ -38,7 +38,7 @@ void rr_curs_invis(void);
  * Returns:
  *  <la_status>
  */
-enum la_status rr_scr_putc(const char in, const struct screen_coord pos);
+void rr_scr_putc(const char in, const struct screen_coord pos);
 
 /*
  * Function: rr_scr_puts
@@ -51,7 +51,21 @@ enum la_status rr_scr_putc(const char in, const struct screen_coord pos);
  * Returns:
  *  <la_status>
  */
-enum la_status rr_scr_puts(const char *in, const struct screen_coord pos);
+void rr_scr_puts(const char *in, const struct screen_coord pos);
+
+/*
+ * Function: rr_scr_puts_len
+ * Writes a string of length <len> to the screen
+ *
+ * Parameters:
+ *  in - what character sequence to write
+ *  pos - where to write it (from the first character)
+ *  len - length of string
+ *
+ * Returns:
+ *  <la_status>
+ */
+void rr_scr_puts_len(const char *in, const struct screen_coord pos, const size_t len);
 
 /*
  * Function: rr_scr_render

@@ -2,9 +2,6 @@
 
 enum la_status rr_curs_mov(const struct screen_coord pos)
 {
-    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB) {
-        return LASCII_SCR_OOB;
-    }
     _la_state->rr_curs_pos = pos;
     return LASCII_OK;
 }
@@ -21,30 +18,28 @@ void rr_curs_invis(void)
     return;
 }
 
-enum la_status rr_scr_putc(const char in, const struct screen_coord pos)
+void rr_scr_putc(const char in, const struct screen_coord pos)
 {
-    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB) {
-        return LASCII_SCR_OOB;
+    if (in != _la_state->rr_oldframe[pos.y][pos.x]) {
+        _la_state->rr_curframe[pos.y][pos.x] = in;
+        _la_state->rr_update_cell_p[pos.y][pos.x] = true;
     }
-
-    if (in != _la_state->rr_oldframe[pos.row-1][pos.col-1]) {
-        _la_state->rr_curframe[pos.row-1][pos.col-1] = in;
-        _la_state->rr_update_cell_p[pos.row-1][pos.col-1] = true;
-    }
-    return LASCII_OK;
 }
 
-enum la_status rr_scr_puts(const char *in, const struct screen_coord pos)
+void rr_scr_puts(const char *in, const struct screen_coord pos)
 {
     const int len = strlen(in);
-    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB || ll_scr_coords_check(pos) + len == LASCII_SCR_OOB) {
-        return LASCII_SCR_OOB;
-    }
 
     for (int i = 0; i < len; i++) {
-        rr_scr_putc(*(in + i), (struct screen_coord){pos.row, pos.col + i});
+        rr_scr_putc(*(in + i), (struct screen_coord){pos.x + i, pos.y});
     }
-    return LASCII_OK;
+}
+
+void rr_scr_puts_len(const char *in, const struct screen_coord pos, const size_t len)
+{
+    for (size_t i = 0; i < len; i++) {
+        rr_scr_putc(*(in + i), (struct screen_coord){pos.x + i, pos.y});
+    }
 }
 
 void rr_scr_render(void)
@@ -55,7 +50,7 @@ void rr_scr_render(void)
             if (_la_state->rr_update_cell_p[i][j] == false) {
                 continue;
             }
-            ll_curs_mov((struct screen_coord){i+1, j+1});
+            ll_curs_mov((struct screen_coord){j, i});
             ll_buf_append((char[2]){_la_state->rr_curframe[i][j], '\0'});
         }
     }

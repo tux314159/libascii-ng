@@ -37,17 +37,18 @@ CC = gcc
 AR = ar rcs $@
 
 # Source file list
+SOURCES += src/dstring.c
+SOURCES += src/global.c
 SOURCES += src/init.c
-SOURCES += src/render.c
 SOURCES += src/drivers/common.c
 SOURCES += src/drivers/xterm.c
 SOURCES += src/drivers/vt100.c
-SOURCES += src/global.c
-SOURCES += src/dstring.c
+SOURCES += src/render.c
+SOURCES += src/winsys.c
 
 OBJECTS = $(foreach curfile,$(SOURCES),$(basename $(curfile)).o)
 
-TESTS = tests/build/test1 tests/build/test2
+TESTS = tests/build/test1 tests/build/test2 tests/build/test3
 
 .SUFFIXES :
 

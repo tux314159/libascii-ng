@@ -13,29 +13,33 @@ enum la_status lascii_init(void)
 
     /* More memory init */
     RETIFNOK(string_init(&_la_state->buf));
-
-    /* For the renderer */
-    _la_state->rr_curframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
-    _la_state->rr_oldframe = malloc(_la_state->scr_size.ws_row * sizeof(char*));
+    /* Renderer */
+    _la_state->rr_curframe      = malloc(_la_state->scr_size.ws_row * sizeof(char*));
+    _la_state->rr_oldframe      = malloc(_la_state->scr_size.ws_row * sizeof(char*));
     _la_state->rr_update_cell_p = malloc(_la_state->scr_size.ws_row * sizeof(bool*));
     for (int i = 0; i < _la_state->scr_size.ws_row; i++) {
-        _la_state->rr_curframe[i] = calloc(_la_state->scr_size.ws_col, sizeof(char));
-        _la_state->rr_oldframe[i] = calloc(_la_state->scr_size.ws_col, sizeof(char));
-        _la_state->rr_update_cell_p[i] = calloc(_la_state->scr_size.ws_col, sizeof(bool));
+        _la_state->rr_curframe[i]       = calloc(_la_state->scr_size.ws_col, sizeof(char));
+        _la_state->rr_oldframe[i]       = calloc(_la_state->scr_size.ws_col, sizeof(char));
+        _la_state->rr_update_cell_p[i]  = calloc(_la_state->scr_size.ws_col, sizeof(bool));
     }
+    /* Window system */
+    _la_state->ws_n_frames  = 0;
+    _la_state->ws_n_bufs    = 0;
+    _la_state->ws_frames    = malloc(0);
+    _la_state->ws_bufs      = malloc(0);
+
 
     /* Set driver stuff */
     /* TODO: detect terminal type and set driver and functions
      * Probably by querying $TERM? */
-    _la_state->driver = VT100;
-    _la_state->ll_curs_mov = &vt100_curs_mov;
-    _la_state->ll_curs_vis = &vt100_curs_vis;
-    _la_state->ll_curs_invis = &vt100_curs_invis;
-    _la_state->ll_scr_clear = &vt100_scr_clear;
-    _la_state->ll_ln_clear = &vt100_ln_clear;
-    _la_state->ll_alt_scr_on = &xterm_alt_scr_on;
-    _la_state->ll_alt_scr_off = &xterm_alt_scr_off;
-
+    _la_state->driver           = VT100;
+    _la_state->ll_curs_mov      = &vt100_curs_mov;
+    _la_state->ll_curs_vis      = &vt100_curs_vis;
+    _la_state->ll_curs_invis    = &vt100_curs_invis;
+    _la_state->ll_scr_clear     = &vt100_scr_clear;
+    _la_state->ll_ln_clear      = &vt100_ln_clear;
+    _la_state->ll_alt_scr_on    = &xterm_alt_scr_on;
+    _la_state->ll_alt_scr_off   = &xterm_alt_scr_off;
     /* Init the screen */
     /* Raw mode */
     memset(&_la_state->orig_termios, 0, sizeof(struct termios));
@@ -77,6 +81,8 @@ void lascii_deinit(void)
     free(_la_state->rr_curframe);
     free(_la_state->rr_oldframe);
     free(_la_state->rr_update_cell_p);
+    free(_la_state->ws_frames);
+    free(_la_state->ws_bufs);
     /**/
     string_deinit(&_la_state->buf);
     free(_la_state);

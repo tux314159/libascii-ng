@@ -31,9 +31,6 @@ void ll_buf_write(void)
 
 enum la_status ll_curs_mov(const struct screen_coord pos)
 {
-    if (ll_scr_coords_check(pos) == LASCII_SCR_OOB) {
-        return LASCII_SCR_OOB;
-    }
     _la_state->ll_curs_mov(pos);
     _la_state->curs_pos = (struct screen_coord){1, 1};
     return LASCII_OK;
@@ -64,16 +61,6 @@ struct winsize ll_scr_getsize(void)
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     return w;
-}
-
-enum la_status ll_scr_coords_check(struct screen_coord coord)
-{
-    if (coord.row > _la_state->scr_size.ws_row ||
-            coord.col > _la_state->scr_size.ws_col ||
-            coord.row < 1 || coord.col < 1) {
-        return LASCII_SCR_OOB;
-    }
-    return LASCII_OK;
 }
 
 void ll_alt_scr_on(void)
