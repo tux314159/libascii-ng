@@ -31,10 +31,10 @@ DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR)
 LIBFLAGS = -L. -lascii
-CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -o $@
+CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -o $@
 
 CC = gcc
-AR = ar rcs $@
+AR = ar -rcs $@
 
 # Source file list
 SOURCES += src/dstring.c
@@ -64,7 +64,8 @@ libascii.a : $(OBJECTS)
 
 ###
 
-test : $(TESTS)
+test : __FORCE__ $(TESTS)
+	$V mkdir -p tests/build
 
 tests/build/% : tests/%.c libascii.a
 	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
