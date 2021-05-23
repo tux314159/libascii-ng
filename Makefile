@@ -64,8 +64,7 @@ libascii.a : $(OBJECTS)
 
 ###
 
-test : __FORCE__ $(TESTS)
-	$V mkdir -p tests/build
+test : $(TESTS)
 
 tests/build/% : tests/%.c libascii.a
 	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
