@@ -3,6 +3,7 @@ build/
 .cache
 compile_commands.json
 tests/build
+!tests/build/.GITIGNORE
 Session.vim
 tags
 libascii.a
