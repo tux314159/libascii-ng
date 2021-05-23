@@ -20,10 +20,8 @@ void rr_curs_invis(void)
 
 void rr_scr_putc(const char in, const struct screen_coord pos)
 {
-    if (in != _la_state->rr_oldframe[pos.y][pos.x]) {
-        _la_state->rr_curframe[pos.y][pos.x] = in;
-        _la_state->rr_update_cell_p[pos.y][pos.x] = true;
-    }
+    _la_state->rr_curframe[pos.y][pos.x] = in;
+    _la_state->rr_update_cell_p[pos.y][pos.x] = (in != _la_state->rr_oldframe[pos.y][pos.x]);
 }
 
 void rr_scr_puts(const char *in, const struct screen_coord pos)
@@ -45,8 +43,10 @@ void rr_scr_puts_len(const char *in, const struct screen_coord pos, const size_t
 void rr_scr_render(void)
 {
     ll_buf_clear();
-    for (int i = 0; i < _la_state->scr_size.ws_row; ++i) {
-        for (int j = 0; j < _la_state->scr_size.ws_col; ++j) {
+
+    /* Render */
+    for (int i = 0; i < _la_state->scr_size.h; ++i) {
+        for (int j = 0; j < _la_state->scr_size.w; ++j) {
             if (_la_state->rr_update_cell_p[i][j] == false) {
                 continue;
             }
@@ -64,8 +64,12 @@ void rr_scr_render(void)
     }
     ll_buf_write();
 
-    for (int i = 0; i < _la_state->scr_size.ws_row; ++i) {
-        memset(_la_state->rr_update_cell_p[i], 0, sizeof(bool) * _la_state->scr_size.ws_col);
+    /* Reset the stuff and update old frame */
+    for (int i = 0; i < _la_state->scr_size.h; ++i) {
+        memset(_la_state->rr_update_cell_p[i], false, sizeof(bool) * _la_state->scr_size.w);
+        memcpy(_la_state->rr_oldframe[i], _la_state->rr_curframe[i],
+               sizeof(char) * _la_state->scr_size.w
+        );
     }
 
     return;
