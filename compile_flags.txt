@@ -1,3 +1,4 @@
+-std=gnu99
 -Wall
 -Wpedantic
 -Wextra

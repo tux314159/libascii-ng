@@ -104,6 +104,13 @@ void ws_render(void)
             continue; /* don't render if not active */
         }
 
+        /* blank the background for drawing */
+        for (int j = cframe->pos.x; j < cframe->pos.x + cframe->winsz.w; j++) {
+            for (int k = cframe->pos.y; k < cframe->pos.y + cframe->winsz.h; k++) {
+                rr_scr_putc(' ', (struct screen_coord){j, k});
+            }
+        }
+
         for (int j = 0; j < cframe->winsz.h; j++) {
             rr_scr_putc('|', (struct screen_coord){cframe->pos.x, cframe->pos.y + j});
             rr_scr_putc('|', (struct screen_coord){
