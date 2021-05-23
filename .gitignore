@@ -2,7 +2,7 @@
 build/
 .cache
 compile_commands.json
-tests/build
+tests/build/*
 !tests/build/.GITINCLUDE
 Session.vim
 tags
