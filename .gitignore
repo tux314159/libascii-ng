@@ -1,9 +1,10 @@
-*.o
-build/
-.cache
-compile_commands.json
-tests/build/*
-!tests/build/.GITINCLUDE
 Session.vim
+/.cache
+/compile_commands.json
 tags
-libascii.a
+
+*.o
+/libascii.a
+
+/tests/build/*
+!/tests/build/.GITINCLUDE
