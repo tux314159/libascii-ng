@@ -41,22 +41,25 @@ struct winsz {
 
 /*
  * Struct: frame
- * A physical window on the screen
+ * A physical window on the screen;
  * Not the frames in the renderer!
- * May have at most one buffer bound to it
+ * May have at most one buffer bound to it.
  */
 struct frame {
-    struct  screen_coord pos;
-    struct  winsz winsz;
+    struct screen_coord pos;
+    struct screen_coord oldpos;
+    struct winsz        winsz;
+
     int     boundbuf;
     bool    activep;
+    char    borders[4]; /* NESW */
     size_t  scroll_v; /* how far we've scrolled (top line) */
     size_t  scroll_h; /* how far we've scrolled (first char) */
 };
 
 /*
  * Struct: buffer
- * A text buffer that may be bound to a frame
+ * A text buffer that may be bound to a frame.
  */
 struct buffer {
     struct string   **buf; /* one per line */
@@ -66,12 +69,12 @@ struct buffer {
 /* Global state */
 struct la_state {
     /* Lower-level */
-    enum    driver_t driver;
-    struct  string buf;
-    struct  screen_coord curs_pos;
-    struct  winsize scr_size;
-    struct  termios orig_termios;
-    struct  termios raw_termios;
+    enum    driver_t        driver;
+    struct  string          buf;
+    struct  screen_coord    curs_pos;
+    struct  winsz           scr_size;
+    struct  termios         orig_termios;
+    struct  termios         raw_termios;
 
     /* Function pointers to the appropriate driver-specific function */
     void (*ll_curs_mov)(const struct screen_coord);

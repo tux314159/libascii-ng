@@ -1,20 +1,29 @@
 #include <winsys.h>
 
-int ws_frame_new(const struct screen_coord pos, const struct winsz winsz)
+int ws_frame_new(const struct screen_coord pos, const struct winsz winsz,
+                 char borderN, char borderE, char borderS, char borderW)
 {
     const int       n_frames        = _la_state->ws_n_frames;
+    struct frame    *cframe;
+
 
     struct frame *tempframes = realloc(_la_state->ws_frames, (n_frames+1) * sizeof(struct frame));
     if (tempframes == NULL) {
         return -1;
     }
 
-    tempframes[n_frames].pos       = pos;
-    tempframes[n_frames].winsz     = winsz;
-    tempframes[n_frames].activep   = true; /* active by default */
-    tempframes[n_frames].boundbuf	= -1;
-    tempframes[n_frames].scroll_v	= 0;
-    tempframes[n_frames].scroll_h	= 0;
+    cframe = &tempframes[n_frames];
+
+    cframe->pos         = pos;
+    cframe->winsz       = winsz;
+    cframe->boundbuf    = -1;
+    cframe->activep     = true; /* active by default */
+    cframe->borders[0]  = borderN;
+    cframe->borders[1]  = borderE;
+    cframe->borders[2]  = borderS;
+    cframe->borders[3]  = borderW;
+    cframe->scroll_v	= 0;
+    cframe->scroll_h	= 0;
     _la_state->ws_frames = tempframes;
     _la_state->ws_n_frames += 1;
     return n_frames; /* this is our copy */
@@ -97,8 +106,8 @@ void ws_render(void)
     const struct buffer *const  bufs        = _la_state->ws_bufs;
 
     for (int i = 0; i < n_frames; i++) {
-        const struct frame *cframe  = &frames[i];
-        const struct buffer *cbuf   = &bufs[cframe->boundbuf];
+        const struct frame  *cframe = &frames[i];
+        const struct buffer *cbuf;
 
         if (!cframe->activep) {
             continue; /* don't render if not active */
@@ -111,24 +120,34 @@ void ws_render(void)
             }
         }
 
-        for (int j = 0; j < cframe->winsz.h; j++) {
-            rr_scr_putc('|', (struct screen_coord){cframe->pos.x, cframe->pos.y + j});
-            rr_scr_putc('|', (struct screen_coord){
-                        cframe->pos.x + cframe->winsz.w,
+        /* Next two loops render borders */
+        for (int j = 0; j < cframe->winsz.h; j++) { /* left & right */
+            rr_scr_putc(cframe->borders[3],
+                    (struct screen_coord){cframe->pos.x, cframe->pos.y + j}
+            );
+            rr_scr_putc(cframe->borders[1], (struct screen_coord){
+                        cframe->pos.x + cframe->winsz.w - 1,
                         cframe->pos.y + j
                     }
             );
         }
 
-        for (int j = 0; j <= cframe->winsz.w; j++) {
-            rr_scr_putc('-', (struct screen_coord){cframe->pos.x + j, cframe->pos.y});
-            rr_scr_putc('-', (struct screen_coord){
+        for (int j = 0; j < cframe->winsz.w; j++) { /* top & bottom */
+            rr_scr_putc(cframe->borders[0],
+                    (struct screen_coord){cframe->pos.x + j, cframe->pos.y}
+            );
+            rr_scr_putc(cframe->borders[2], (struct screen_coord){
                         cframe->pos.x + j,
                         cframe->pos.y + cframe->winsz.h - 1
                     }
             );
         }
 
+        /* Render buffer */
+        if (cframe->boundbuf == -1) {
+            continue; /* nothing to look at here, move on! */
+        }
+        cbuf = &bufs[cframe->boundbuf];
         for (size_t j = cframe->scroll_v; j < cframe->scroll_v + cframe->winsz.h; ++j) {
             if (j >= cbuf->n_lines) {
                 break;

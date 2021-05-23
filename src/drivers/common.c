@@ -54,13 +54,16 @@ void ll_scr_clear(void)
     return;
 }
 
-struct winsize ll_scr_getsize(void)
+struct winsz ll_scr_getsize(void)
 {
     /* TODO: Maybe make this less platform-specific?
      * Maybe, just maybe... */
     struct winsize w;
+    struct winsz w2;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return w;
+    w2.w = w.ws_col;
+    w2.h = w.ws_row;
+    return w2;
 }
 
 void ll_alt_scr_on(void)

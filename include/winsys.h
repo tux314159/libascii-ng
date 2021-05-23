@@ -18,8 +18,13 @@
  * Creates a new frame.
  * Parameters:
  *  pos     - position of the top left corner
- *  winsz   - size of the frame */
-int ws_frame_new(const struct screen_coord pos, const struct winsz winsz);
+ *  winsz   - size of the frame
+ *  borderN - north/top border 
+ *  borderE - east/right border
+ *  borderS - south/bottom border
+ *  borderW - west/left border */
+int ws_frame_new(const struct screen_coord pos, const struct winsz winsz,
+                 char borderN, char borderE, char borderS, char borderW);
 
 /* Function: ws_frame_free
  * Frees a frame.

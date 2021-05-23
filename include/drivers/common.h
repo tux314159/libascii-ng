@@ -72,7 +72,7 @@ void ll_scr_clear(void);
  * Returns:
  *  The screen size
  */
-struct winsize ll_scr_getsize(void);
+struct winsz ll_scr_getsize(void);
 
 /*
  * Function: ll_scr_coords_check
