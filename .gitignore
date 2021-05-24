@@ -4,6 +4,7 @@ Session.vim
 tags
 
 *.o
+*.d
 /libascii.a
 
 /tests/build/*
