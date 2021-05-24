@@ -88,7 +88,7 @@ $(BUILDDIR)/src/tests/% : src/tests/%.c
 ###
 
 clean : __FORCE__
-	$V rm -rfv build/*
+	$V rm -rf build/
 	$V echo Clean
 
 __FORCE__ :
