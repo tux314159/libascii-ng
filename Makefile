@@ -1,4 +1,5 @@
 HEADERDIR = include
+BUILDDIR = build
 
 V = @
 
@@ -30,49 +31,64 @@ WARNINGS += -Werror
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR)
-LIBFLAGS = -L. -lascii
-CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -o $@
+LIBFLAGS = -L$(BUILDDIR) -lascii
+CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
 
 CC = gcc
 AR = ar -rcs $@
 
 # Source file list
-SOURCES += src/dstring.c
-SOURCES += src/global.c
-SOURCES += src/init.c
-SOURCES += src/drivers/common.c
-SOURCES += src/drivers/xterm.c
-SOURCES += src/drivers/vt100.c
-SOURCES += src/render.c
-SOURCES += src/winsys.c
+SRCS += src/dstring.c
+SRCS += src/global.c
+SRCS += src/init.c
+SRCS += src/drivers/common.c
+SRCS += src/drivers/xterm.c
+SRCS += src/drivers/vt100.c
+SRCS += src/render.c
+SRCS += src/winsys.c
 
-OBJECTS = $(foreach curfile,$(SOURCES),$(basename $(curfile)).o)
+TESTSRCS += $(wildcard src/tests/*.c)
 
-TESTS = tests/build/test1 tests/build/test2 tests/build/test3
+ ###
+
+OBJS := $(SRCS:%=$(BUILDDIR)/%.o)
+OBJS := $(OBJS:.c.o=.o)
+DEPS := $(OBJS:.o=.d)
+
+TESTBINS = $(TESTSRCS:%.c=$(BUILDDIR)/%)
+###
+
+.PHONY : all clean tests __FORCE__
 
 .SUFFIXES :
 
-all : libascii.a test
+###
 
-libascii.a : $(OBJECTS)
-	$V printf "Creating static library \033[1m$@\033[0m...\n"
+all : $(BUILDDIR)/libascii.a tests
+
+-include $(DEPS)
+
+$(BUILDDIR)/libascii.a : $(OBJS)
+	$V printf "Creating static library \033[1m$(notdir $@)\033[0m...\n"
 	$V $(AR) $^
 
-%.o : %.c
+$(BUILDDIR)/%.o : %.c
+	$V mkdir -p $(dir $@)
 	$V printf "Compiling \033[1m$(notdir $@)\033[0m from $(notdir $<)...\n"
-	$V $(CC) $(CFLAGS) -c $^
+	$V $(CC) $(CFLAGS) -c $<
+
+### 
+tests : $(TESTBINS)
+
+$(BUILDDIR)/src/tests/% : src/tests/%.c
+	$V mkdir -p $(dir $@)
+	$V printf "Compiling \033[1m$(notdir $@)\033[0m from $(notdir $<)...\n"
+	$V $(CC) $(CFLAGS) $< $(LIBFLAGS)
 
 ###
 
-test : $(TESTS)
-
-tests/build/% : tests/%.c libascii.a
-	$V printf "Compiling and linking \033[1m$@\033[0m...\n"
-	$V $(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBFLAGS)
-
 clean : __FORCE__
-	$V rm -f $(OBJECTS)
-	$V rm -f $(TESTS)
+	$V rm -rfv build/*
 	$V echo Clean
 
 __FORCE__ :
