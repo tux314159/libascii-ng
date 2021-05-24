@@ -5,7 +5,7 @@ tags
 
 *.o
 *.d
-/libascii.a
+build/
 
 /tests/build/*
 !/tests/build/.GITINCLUDE
