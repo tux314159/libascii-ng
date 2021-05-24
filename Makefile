@@ -80,7 +80,7 @@ $(BUILDDIR)/%.o : %.c
 ### 
 tests : $(TESTBINS)
 
-$(BUILDDIR)/src/tests/% : src/tests/%.c
+$(BUILDDIR)/src/tests/% : src/tests/%.c $(BUILDDIR)/libascii.a
 	$V mkdir -p $(dir $@)
 	$V printf "Compiling \033[1m$(notdir $@)\033[0m from $(notdir $<)...\n"
 	$V $(CC) $(CFLAGS) $< $(LIBFLAGS)
