@@ -27,7 +27,7 @@ enum la_status lascii_init(void)
     /* Window system */
     _la_state->ws_n_frames  = 0;
     _la_state->ws_n_bufs    = 0;
-    _la_state->ws_frames    = malloc(0);
+    llist_init(&_la_state->ws_frames, sizeof(struct frame));
     _la_state->ws_bufs      = malloc(0);
 
 
@@ -83,7 +83,7 @@ void lascii_deinit(void)
     free(_la_state->rr_curframe);
     free(_la_state->rr_oldframe);
     free(_la_state->rr_update_cell_p);
-    free(_la_state->ws_frames);
+    llist_deinit(&_la_state->ws_frames);
     free(_la_state->ws_bufs);
     /**/
     string_deinit(&_la_state->buf);

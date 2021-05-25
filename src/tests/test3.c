@@ -22,20 +22,22 @@ static inline void msleep(long msec)
 int main(void)
 {
     char c;
-    int x0, x1, y1, x2, y2, x3, y3, c1, c2;
+    int y1, y2, y3, c1, c2;
+    struct llist_node *x0, *x1, *x2, *x3;
+    (void)x0;
 
     lascii_init();
     ll_stdin_nonblock();
     rr_curs_invis();
 
-    x0 = ws_frame_new((struct screen_coord){0, 0}, ll_scr_getsize(), ' ', ' ', ' ', ' ');
+    x0 = ws_frame_new((struct screen_coord){0, 0}, ll_scr_getsize(), NULL, ' ', ' ', ' ', ' ');
 
-    x1 = ws_frame_new((struct screen_coord){0, 0}, (struct winsz){15, 3}, '-', '|', '-', '|');
+    x1 = ws_frame_new((struct screen_coord){0, 0}, (struct winsz){15, 3}, NULL, '-', '|', '-', '|');
     y1 = ws_buf_new();
     ws_buf_aline(y1, "Hello, world!");
     ws_frame_bind_buf(x1, y1);
 
-    x2 = ws_frame_new((struct screen_coord){20, 4}, (struct winsz){20,  20}, '-', '|', '-', '|');
+    x2 = ws_frame_new((struct screen_coord){20, 4}, (struct winsz){20,  20}, NULL, '-', '|', '-', '|');
     y2 = ws_buf_new();
     ws_buf_aline(y2, "Whee!");
     ws_buf_aline(y2, "How do you do?");
@@ -43,7 +45,7 @@ int main(void)
 
     c1 = 3;
     c2 = 8;
-    x3 = ws_frame_new((struct screen_coord){c1, c2}, (struct winsz){25,  5}, '-', '|', '-', '|');
+    x3 = ws_frame_new((struct screen_coord){c1, c2}, (struct winsz){25,  5}, x2, '-', '|', '-', '|');
     y3 = ws_buf_new();
     ws_buf_aline(y3, "");
     ws_buf_aline(y3, "HALLO NIANNY!!! :DDDD");
@@ -74,12 +76,8 @@ int main(void)
     } while (c != 'q');
 
     ll_stdin_getchar();
-    ws_frame_free(x0);
-    ws_frame_free(x1);
     ws_buf_free(y1);
-    ws_frame_free(x2);
     ws_buf_free(y2);
-    ws_frame_free(x3);
     ws_buf_free(y3);
     lascii_deinit();
     return 0;

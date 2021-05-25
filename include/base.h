@@ -12,6 +12,7 @@
 
 #include <status.h>
 #include <dstring.h>
+#include <llist.h>
 
 /* Enum: driver_type
  * Enumerates driver types
@@ -99,7 +100,7 @@ struct la_state {
     /* Windowing system */
     int             ws_n_frames;
     int             ws_n_bufs;
-    struct frame    *ws_frames;
+    struct llist    ws_frames;
     struct buffer   *ws_bufs;
 };
 

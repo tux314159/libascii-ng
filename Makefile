@@ -32,13 +32,14 @@ DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR)
 LIBFLAGS = -L$(BUILDDIR) -lascii
-CFLAGS = -std=gnu99 -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
+CFLAGS = -std=gnu99 -fsigned-char -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
 
 CC = gcc
 AR = ar -rcs $@
 
 # Source file list
 SRCS += src/dstring.c
+SRCS += src/llist.c
 SRCS += src/global.c
 SRCS += src/init.c
 SRCS += src/drivers/common.c
@@ -78,6 +79,7 @@ $(BUILDDIR)/%.o : %.c
 	$V $(CC) $(CFLAGS) -c $<
 
 ### 
+
 tests : $(TESTBINS)
 
 $(BUILDDIR)/src/tests/% : src/tests/%.c $(BUILDDIR)/libascii.a

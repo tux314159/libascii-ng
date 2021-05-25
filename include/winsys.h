@@ -17,38 +17,34 @@
 /* Function: ws_frame_new
  * Creates a new frame.
  * Parameters:
- *  pos     - position of the top left corner
- *  winsz   - size of the frame
- *  borderN - north/top border 
- *  borderE - east/right border
- *  borderS - south/bottom border
- *  borderW - west/left border */
-int ws_frame_new(const struct screen_coord pos, const struct winsz winsz,
-                 char borderN, char borderE, char borderS, char borderW);
-
-/* Function: ws_frame_free
- * Frees a frame.
- * Parameters:
- *  frameid - frame to free */
-void ws_frame_free(const int frameid);
+ *  pos         - position of the top left corner
+ *  winsz       - size of the frame
+ *  stackpos    - pointer to frame to place this one before; if NULL, place at back.
+ *  borderN     - north/top border 
+ *  borderE     - east/right border
+ *  borderS     - south/bottom border
+ *  borderW     - west/left border */
+struct llist_node *ws_frame_new(const struct screen_coord pos, const struct winsz winsz,
+                                struct llist_node *stackpos, char borderN, char borderE,
+                                char borderS, char borderW);
 
 /* Function: ws_frame_bind_buf
  * Binds a frame to a buffer.
  * Parameters:
- *  frameid - frame to bind to
- *  bufid   - buffer to bind */
-void ws_frame_bind_buf(const int frameid, const int bufid);
+ *  frameptr    - frame to bind to
+ *  bufid       - buffer to bind */
+void ws_frame_bind_buf(struct llist_node *frameptr, const int bufid);
 
 /* Function: ws_frame_mv
  * Moves a frame to a new position.
  * Parameters:
  *  frameid - id of the frame to be moved
  *  pos     - position to move it to */
-void ws_frame_mv(const int frameid, const struct screen_coord pos);
+void ws_frame_mv(struct llist_node *frameptr, const struct screen_coord pos);
 
 /* Function: ws_frame_rs
  * Resizes a frame. */
-void ws_frame_rs(const int frameid, const struct winsz ws);
+void ws_frame_rs(struct llist_node *frameptr, const struct winsz ws);
 
 /* Function: ws_buf_new
  * Creates a new buffer. */
