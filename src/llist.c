@@ -40,39 +40,6 @@ void llist_deinit(struct llist *in)
 
 
 /* INSERT */
-struct llist_node *llist_pushback(struct llist *in, const void *val)
-{
-    struct llist_node *new;
-
-    new = malloc(sizeof(struct llist_node));
-
-    if (new == NULL) {
-        return NULL;
-    }
-
-    new->data = malloc(in->dsize);
-
-    if (new->data == NULL) {
-        free(new);
-        return NULL;
-    }
-
-    memcpy(new->data, val, in->dsize);
-
-    new->prev = in->tail;
-    new->next = NULL;
-
-    if (in->len == 0)
-        in->head = in->tail = new;
-    else
-        in->tail->next = new;
-
-    in->tail = new;
-    in->len += 1;
-
-    return new;
-}
-
 struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const void *val)
 {
     struct llist_node *new;
@@ -99,7 +66,9 @@ struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const
     new->prev = nod->prev;
     new->next = nod;
 
-    nod->prev->next = new;
+    if (nod->prev) {
+        nod->prev->next = new;
+    }
     nod->prev = new;
 
     in->len += 1;
@@ -140,32 +109,43 @@ struct llist_node *llist_pushfront(struct llist *in, const void *val)
     return new;
 }
 
-enum la_status llist_popback(struct llist *in)
+struct llist_node *llist_pushback(struct llist *in, const void *val)
 {
-    struct llist_node *old;
+    struct llist_node *new;
 
-    NULLCHK(in);
+    new = malloc(sizeof(struct llist_node));
 
-    old = in->tail;
-
-    if (in->tail != in->head) {
-        in->tail->prev->next = NULL;
-        in->tail = in->tail->prev;
+    if (new == NULL) {
+        return NULL;
     }
 
-    free(old->data);
-    free(old);
+    new->data = malloc(in->dsize);
 
-    in->len -= 1;
+    if (new->data == NULL) {
+        free(new);
+        return NULL;
+    }
 
-    return LASCII_OK;
+    memcpy(new->data, val, in->dsize);
+
+    new->prev = in->tail;
+    new->next = NULL;
+
+    if (in->len == 0)
+        in->head = in->tail = new;
+    else
+        in->tail->next = new;
+
+    in->tail = new;
+    in->len += 1;
+
+    return new;
 }
 
-enum la_status llist_delnode(struct llist *in, struct llist_node *nod)
-{
-    NULLCHK(in);
-    NULLCHK(nod);
+/* Delete */
 
+void llist_delnode(struct llist *in, struct llist_node *nod)
+{
     if (nod != in->head)
         nod->prev->next = nod->next;
     if (nod != in->tail)
@@ -180,15 +160,79 @@ enum la_status llist_delnode(struct llist *in, struct llist_node *nod)
 
     in->len -= 1;
 
-    return LASCII_OK;
+    return;
 }
 
-enum la_status llist_popfront(struct llist *in)
+void llist_popfront(struct llist *in)
 {
-    NULLCHK(in);
-
     llist_delnode(in, llist_getnode(in, 0));
 
-    return LASCII_OK;
+    return;
 }
 
+void llist_popback(struct llist *in)
+{
+    struct llist_node *old;
+
+    old = in->tail;
+
+    if (in->tail != in->head) {
+        in->tail->prev->next = NULL;
+        in->tail = in->tail->prev;
+    }
+
+    free(old->data);
+    free(old);
+
+    in->len -= 1;
+
+    return;
+}
+
+/* RE-ORDERING */
+
+void llist_nodeswap(struct llist_node *a, struct llist_node *b)
+{
+    if (a == NULL || b == NULL) { /* bruh */
+        return;
+    }
+
+    /* note we cannot just swap data pointers here; we need to
+     * preserve references to nodes.
+     */
+    if (a->next == b) {
+        /* x <-> a <-> b <-> y */
+        a->next = b->next;  // y
+        b->next = a;        // a
+        b->prev = a->prev;  // x
+        a->prev = b;        // b
+
+        /* code style exception ehe */
+        if (a->next) a->next->prev = a;
+        if (b->prev) b->prev->next = b;
+    } else if (b->next == a) {
+        /* x <-> b <-> a <-> y */
+        b->next = a->next;  // y
+        a->next = b;        // b
+        a->prev = b->prev;  // x
+        b->prev = a;        // a
+
+        if (b->next) b->next->prev = b;
+        if (a->prev) a->prev->next = a;
+
+    } else {
+        /* w <-> a/b <-> x ... y <-> b/a <-> z */
+        struct llist_node *t;
+        t = a->next;        // x/z
+        a->next = b->next;  // z/x
+        b->next = t;        // x/z
+        t = a->prev;        // w/y
+        a->prev = b->prev;  // y/w
+        b->prev = t;        // w/y
+
+        if (a->next) a->next->prev = a;
+        if (a->prev) a->prev->next = a;
+        if (b->next) b->next->prev = b;
+        if (b->prev) b->prev->next = b;
+    }
+}

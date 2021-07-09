@@ -31,29 +31,6 @@
     }
 
 /*
- * Macro: TRAVERSE_LLIST_BACK
- * traverse a linked list backwards and perform operations on it
- *
- * Parameters:
- *  tailptr - _COPY OF_ tail of list to be traversed
- *  actions - actions to perform on each traversal.
- *            There may be multiple actions; in that case
- *            separate them with a semicolon
- *
- * Warning:
- *  Directly passing the tail of the linked list will result in
- *  corruption!
- *
- * See also:
- *  <TRAVERSE_LLIST>
- */
-#define TRAVERSE_LLIST_BACK(tailptr, actions) \
-    while (tailptr != NULL) { \
-        actions; \
-        tailptr = tailptr->prev; \
-    }
-
-/*
  * Struct: llist_node
  * A node in an <llist>
  */
@@ -110,24 +87,15 @@ void llist_deinit(struct llist *in);
 
 /*
  * Function: llist_addnode
- * Adds a node _right at_ nod, pushing outher nodes, if any, back.
+ * Adds a node _at_ nod.
  * Returns NULL if allocation fails at any point.
  *
  * Parameters:
- *  in - list to operate on
+ *  in  - list to operate on
+ *  nod - node to push in after; if NULL, push to front.
  *  val - pointer to value to push
  */
 struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const void *val);
-
-/*
- * Function: llist_pushback
- * Pushes a value to the back of the list.
- *
- * Parameters:
- *  in - list to operate on
- *  val - pointer to value to push
- */
-struct llist_node *llist_pushback(struct llist *in, const void *val);
 
 /*
  * Function: llist_pushfront
@@ -143,13 +111,14 @@ struct llist_node *llist_pushback(struct llist *in, const void *val);
 struct llist_node *llist_pushfront(struct llist *in, const void *val);
 
 /*
- * Function: llist_popback
- * Pops a value from the back of the list.
+ * Function: llist_pushback
+ * Pushes a value to the back of the list.
  *
  * Parameters:
  *  in - list to operate on
+ *  val - pointer to value to push
  */
-enum la_status llist_popback(struct llist *in);
+struct llist_node *llist_pushback(struct llist *in, const void *val);
 
 /*
  * Function: llist_delnode
@@ -159,7 +128,7 @@ enum la_status llist_popback(struct llist *in);
  *  in - list to operate on
  *  nod - pointer to node to delete
  */
-enum la_status llist_delnode(struct llist *in, struct llist_node *nod);
+void llist_delnode(struct llist *in, struct llist_node *nod);
 
 /*
  * Function: llist_popfront
@@ -168,6 +137,25 @@ enum la_status llist_delnode(struct llist *in, struct llist_node *nod);
  * Parameters:
  *  in - list to operate on
  */
-enum la_status llist_popfront(struct llist *in);
+void llist_popfront(struct llist *in);
+
+/*
+ * Function: llist_popback
+ * Pops a value from the back of the list.
+ *
+ * Parameters:
+ *  in - list to operate on
+ */
+void llist_popback(struct llist *in);
+
+/*
+ * Function: llist_nodeswap
+ * Swaps two nodes.
+ * Does nothing if either of them is null.
+ *
+ * Parameters:
+ *  a  - first node
+ *  b  - second node */
+void llist_nodeswap(struct llist_node *a, struct llist_node *b);
 
 #endif /* LLIST_H */

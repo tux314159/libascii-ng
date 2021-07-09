@@ -82,6 +82,18 @@ void ws_buf_aline(const int bufid, const char *str)
     return;
 }
 
+void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p)
+{
+    if (forward_p && frameptr->next) {
+        llist_nodeswap(frameptr, frameptr->next);
+    }
+    else if (!forward_p && frameptr->prev) {
+        llist_nodeswap(frameptr, frameptr->prev);
+    }
+}
+
+/* Gets kinda ugly here */
+
 static inline int min(int a, int b) {
     return a < b ? a : b;
 }

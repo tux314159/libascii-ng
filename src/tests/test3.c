@@ -69,6 +69,12 @@ int main(void)
             case 'l':
                 c1++;
                 break;
+            case 'w':
+                ws_frame_swapstackpos(x3, true);
+                break;
+            case 's':
+                ws_frame_swapstackpos(x3, false);
+                break;
             default:
                 break;
         }
