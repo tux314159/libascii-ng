@@ -202,32 +202,32 @@ void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b
      */
     if (a->next == b) {
         /* x <-> a <-> b <-> y */
-        a->next = b->next;  // y
-        b->next = a;        // a
-        b->prev = a->prev;  // x
-        a->prev = b;        // b
+        a->next = b->next;
+        b->next = a;
+        b->prev = a->prev;
+        a->prev = b;
 
         /* code style exception ehe */
         if (a->next) { a->next->prev = a; }
         if (b->prev) { b->prev->next = b; }
     } else if (b->next == a) {
         /* x <-> b <-> a <-> y */
-        b->next = a->next;  // y
-        a->next = b;        // b
-        a->prev = b->prev;  // x
-        b->prev = a;        // a
+        b->next = a->next;
+        a->next = b;
+        a->prev = b->prev;
+        b->prev = a;
 
         if (b->next) { b->next->prev = b; }
         if (a->prev) { a->prev->next = a; }
     } else {
         /* w <-> a/b <-> x ... y <-> b/a <-> z */
         struct llist_node *t;
-        t = a->next;        // x/z
-        a->next = b->next;  // z/x
-        b->next = t;        // x/z
-        t = a->prev;        // w/y
-        a->prev = b->prev;  // y/w
-        b->prev = t;        // w/y
+        t = a->next;
+        a->next = b->next;
+        b->next = t;
+        t = a->prev;
+        a->prev = b->prev;
+        b->prev = t;
 
         if (a->next) { a->next->prev = a; }
         if (a->prev) { a->prev->next = a; }
