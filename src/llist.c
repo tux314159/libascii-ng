@@ -191,9 +191,9 @@ void llist_popback(struct llist *in)
 
 /* RE-ORDERING */
 
-void llist_nodeswap(struct llist_node *a, struct llist_node *b)
+void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b)
 {
-    if (a == NULL || b == NULL) { /* bruh */
+    if (a == NULL || b == NULL || a == b) { /* bruh */
         return;
     }
 
@@ -208,8 +208,8 @@ void llist_nodeswap(struct llist_node *a, struct llist_node *b)
         a->prev = b;        // b
 
         /* code style exception ehe */
-        if (a->next) a->next->prev = a;
-        if (b->prev) b->prev->next = b;
+        if (a->next) { a->next->prev = a; }
+        if (b->prev) { b->prev->next = b; }
     } else if (b->next == a) {
         /* x <-> b <-> a <-> y */
         b->next = a->next;  // y
@@ -217,9 +217,8 @@ void llist_nodeswap(struct llist_node *a, struct llist_node *b)
         a->prev = b->prev;  // x
         b->prev = a;        // a
 
-        if (b->next) b->next->prev = b;
-        if (a->prev) a->prev->next = a;
-
+        if (b->next) { b->next->prev = b; }
+        if (a->prev) { a->prev->next = a; }
     } else {
         /* w <-> a/b <-> x ... y <-> b/a <-> z */
         struct llist_node *t;
@@ -230,9 +229,19 @@ void llist_nodeswap(struct llist_node *a, struct llist_node *b)
         a->prev = b->prev;  // y/w
         b->prev = t;        // w/y
 
-        if (a->next) a->next->prev = a;
-        if (a->prev) a->prev->next = a;
-        if (b->next) b->next->prev = b;
-        if (b->prev) b->prev->next = b;
+        if (a->next) { a->next->prev = a; }
+        if (a->prev) { a->prev->next = a; }
+        if (b->next) { b->next->prev = b; }
+        if (b->prev) { b->prev->next = b; }
+    }
+
+    {
+        struct llist_node *t;
+        t = in->head;
+        if (t == a) { in->head = b; }
+        if (t == b) { in->head = a; }
+        t = in->tail;
+        if (t == a) { in->tail = b; }
+        if (t == b) { in->tail = a; }
     }
 }

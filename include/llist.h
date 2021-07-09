@@ -154,8 +154,9 @@ void llist_popback(struct llist *in);
  * Does nothing if either of them is null.
  *
  * Parameters:
+ *  in - linked list both a and b are in; assumed to be correct
  *  a  - first node
  *  b  - second node */
-void llist_nodeswap(struct llist_node *a, struct llist_node *b);
+void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b);
 
 #endif /* LLIST_H */

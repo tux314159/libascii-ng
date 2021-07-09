@@ -29,7 +29,7 @@ WARNINGS += -Wwrite-strings
 WARNINGS += -Werror
 
 DEBUG = -g
-OPTIM = -O3 -march=native -mtune=native
+OPTIM = -O0 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR)
 LIBFLAGS = -L$(BUILDDIR) -lascii
 CFLAGS = -std=gnu99 -fsigned-char -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
