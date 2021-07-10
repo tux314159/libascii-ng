@@ -66,6 +66,7 @@ TESTBINS = $(TESTSRCS:%.c=$(BUILDDIR)/%)
 ###
 
 all : $(BUILDDIR)/libascii.a tests
+	$V echo "Build complete."
 
 -include $(DEPS)
 
