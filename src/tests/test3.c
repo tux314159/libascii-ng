@@ -51,7 +51,6 @@ int main(void)
     ws_buf_aline(y3, "HALLO NIANNY!!! :DDDD");
     ws_frame_bind_buf(x3, y3);
 
-    c = ' ';
     do {
         ws_render();
         msleep(20);
