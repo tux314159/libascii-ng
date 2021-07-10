@@ -90,18 +90,18 @@ struct la_state {
 
     /* Renderer */
     struct screen_coord rr_curs_pos;
-    char                **rr_curframe; /* To be rendered next */
-    char                **rr_oldframe;
-    bool                **rr_update_cell_p;
+    char                **rr_curframe; /* To be rendered next; writing happens here */
+    char                **rr_oldframe; /* Previous frame for deltas */
     bool                rr_curs_vis_p;
 
     /**/
 
     /* Windowing system */
-    int             ws_n_frames;
-    int             ws_n_bufs;
-    struct llist    ws_frames;
-    struct buffer   *ws_bufs;
+    int                 ws_n_frames;
+    int                 ws_n_bufs;
+    struct llist        ws_frames;
+    struct buffer       *ws_bufs;
+    struct llist_node   *ws_focused_frame;
 };
 
 extern struct la_state *_la_state; /* actually defined in global.c */

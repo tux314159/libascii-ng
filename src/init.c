@@ -16,13 +16,11 @@ enum la_status lascii_init(void)
     /* Renderer */
     _la_state->rr_curframe      = malloc(_la_state->scr_size.h * sizeof(char*));
     _la_state->rr_oldframe      = malloc(_la_state->scr_size.h * sizeof(char*));
-    _la_state->rr_update_cell_p = malloc(_la_state->scr_size.h * sizeof(bool*));
     for (int i = 0; i < _la_state->scr_size.h; i++) {
         _la_state->rr_curframe[i]       = malloc(_la_state->scr_size.w * sizeof(char));
         _la_state->rr_oldframe[i]       = malloc(_la_state->scr_size.w * sizeof(char));
         memset(_la_state->rr_curframe[i], ' ', _la_state->scr_size.w * sizeof(char));
         memset(_la_state->rr_oldframe[i], ' ', _la_state->scr_size.w * sizeof(char));
-        _la_state->rr_update_cell_p[i]  = calloc(_la_state->scr_size.w, sizeof(bool));
     }
     /* Window system */
     _la_state->ws_n_frames  = 0;
@@ -78,11 +76,9 @@ void lascii_deinit(void)
     for (int i = 0; i < _la_state->scr_size.h; i++) {
         free(_la_state->rr_curframe[i]);
         free(_la_state->rr_oldframe[i]);
-        free(_la_state->rr_update_cell_p[i]);
     }
     free(_la_state->rr_curframe);
     free(_la_state->rr_oldframe);
-    free(_la_state->rr_update_cell_p);
     llist_deinit(&_la_state->ws_frames);
     free(_la_state->ws_bufs);
     /**/
