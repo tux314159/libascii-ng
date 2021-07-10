@@ -159,8 +159,8 @@ static void ws_render_1f(struct frame *cframe)
 
 void ws_render(void)
 {
-    const struct llist          *frames     = &_la_state->ws_frames;
-    struct llist_node           *cframecont = frames->head;
+    const struct llist  *frames     = &_la_state->ws_frames;
+    struct llist_node   *cframecont = frames->head;
 
     TRAVERSE_LLIST(cframecont, ws_render_1f((struct frame *)(cframecont->data)));
     rr_scr_render();
