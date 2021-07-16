@@ -83,7 +83,6 @@ void ll_alt_scr_off()
 void ll_stdin_nonblock(void)
 {
     struct termios ttystate;
-    fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL, 0) | O_NONBLOCK);
     tcgetattr(STDIN_FILENO, &ttystate);
     ttystate.c_cc[VMIN] = 0;
     ttystate.c_cc[VTIME] = 0;
@@ -94,7 +93,6 @@ void ll_stdin_nonblock(void)
 void ll_stdin_block(void)
 {
     struct termios ttystate;
-    fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL, 0) & ~O_NONBLOCK);
     tcgetattr(STDIN_FILENO, &ttystate);
     ttystate.c_cc[VMIN] = 1;
     ttystate.c_cc[VTIME] = 0;
