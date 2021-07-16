@@ -22,7 +22,7 @@ static inline void msleep(long msec)
 int main(void)
 {
     char c;
-    int y1, y2, y3, c1, c2;
+    int y0, y1, y2, y3, c1, c2;
     struct llist_node *x0, *x1, *x2, *x3;
     (void)x0;
 
@@ -31,6 +31,9 @@ int main(void)
     rr_curs_invis();
 
     x0 = ws_frame_new((struct screen_coord){0, 0}, ll_scr_getsize(), NULL, ' ', ' ', ' ', ' ');
+    y0 = ws_buf_new();
+    ws_buf_aline(y0, "                     'h', 'j', 'k' and 'l' to move the window left/down/up/right; 'w' and 's' to bring it forwards/backwards. 'q' to quit.");
+    ws_frame_bind_buf(x0, y0);
 
     x1 = ws_frame_new((struct screen_coord){0, 0}, (struct winsz){15, 3}, NULL, '-', '|', '-', '|');
     y1 = ws_buf_new();
