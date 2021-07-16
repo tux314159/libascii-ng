@@ -101,7 +101,7 @@ struct la_state {
     int                 ws_n_bufs;
     struct llist        ws_frames;
     struct buffer       *ws_bufs;
-    struct llist_node   *ws_focused_frame;
+    struct llist_node   *ws_focused_frame; /* Most frame ops are done on this one */
 };
 
 extern struct la_state *_la_state; /* actually defined in global.c */

@@ -92,6 +92,11 @@ void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p)
     }
 }
 
+void ws_frame_focus(struct llist_node *frameptr)
+{
+    _la_state->ws_focused_frame = frameptr;
+}
+
 /* Gets kinda ugly here */
 
 static inline int min(int a, int b) {

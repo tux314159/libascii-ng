@@ -48,13 +48,19 @@ void ws_frame_rs(struct llist_node *frameptr, const struct winsz ws);
 
 /* Function: ws_frame_swapstackpos
  * Moves a frame in front or behind by one. Does nothing if impossible.
- * I feel sad :( why am I even writing this code
- * Is there even a meaning to anything?
  *
  * Parameters:
  *  frameptr  - frame to move
  *  forward_p - if true, moves in front; else, moves behind */
 void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
+
+/* Function: ws_frame_focus
+ * Sets a frame as the focused frame
+ *
+ * Parameters:
+ *  frameptr - frame to focus
+ */
+void ws_frame_focus(struct llist_node *frameptr);
 
 /* Function: ws_buf_new
  * Creates a new buffer. */
