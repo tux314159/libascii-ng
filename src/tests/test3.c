@@ -80,7 +80,6 @@ int main(void)
         ws_frame_mv(x3, (struct screen_coord){c1, c2});
     } while (c != 'q');
 
-    ll_stdin_getchar();
     ws_buf_free(y1);
     ws_buf_free(y2);
     ws_buf_free(y3);
