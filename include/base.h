@@ -56,6 +56,8 @@ struct frame {
     char    borders[4]; /* NESW */
     size_t  scroll_v; /* how far we've scrolled (top line) */
     size_t  scroll_h; /* how far we've scrolled (first char) */
+
+    char    *input_buffer;
 };
 
 /*

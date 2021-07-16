@@ -53,6 +53,10 @@ enum la_status lascii_init(void)
     _la_state->raw_termios.c_cc[VTIME] = 0;
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_la_state->raw_termios);
 
+    /* Turn off buffering */
+    setvbuf(stdout, NULL, _IONBF, 1024);
+
+    /* Screen clearing and stuff */
     ll_buf_clear();
     ll_alt_scr_on();
     ll_curs_mov((struct screen_coord){1, 1});
