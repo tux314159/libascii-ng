@@ -22,19 +22,19 @@ struct llist_node *ws_frame_new(const struct screen_coord pos, const struct wins
     return llist_addnode(&_la_state->ws_frames, stackpos, &cframe);
 }
 
-void ws_frame_bind_buf(struct llist_node *frameptr, const int bufid)
+void ws_frame_bind_buf(struct llist_node *const frameptr, const int bufid)
 {
     ((struct frame *)frameptr->data)->boundbuf = bufid;
     return;
 }
 
-void ws_frame_mv(struct llist_node *frameptr, const struct screen_coord pos)
+void ws_frame_mv(struct llist_node *const frameptr, const struct screen_coord pos)
 {
     ((struct frame *)frameptr->data)->pos = pos;
     return;
 }
 
-void ws_frame_rs(struct llist_node *frameptr, const struct winsz ws)
+void ws_frame_rs(struct llist_node *const frameptr, const struct winsz ws)
 {
     ((struct frame *)frameptr->data)->winsz = ws;
     return;
@@ -82,7 +82,7 @@ void ws_buf_aline(const int bufid, const char *str)
     return;
 }
 
-void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p)
+void ws_frame_swapstackpos(struct llist_node *const frameptr, const bool forward_p)
 {
     if (forward_p && frameptr->next) {
         llist_nodeswap(&_la_state->ws_frames, frameptr, frameptr->next);
@@ -99,11 +99,11 @@ void ws_frame_focus(struct llist_node *frameptr)
 
 /* Gets kinda ugly here */
 
-static inline int min(int a, int b) {
+static inline int min(const int a, const int b) {
     return a < b ? a : b;
 }
 
-static void ws_render_1f(struct frame *cframe)
+static void ws_render_1f(struct frame *const cframe)
 {
     /* Render a single frame */
     const struct buffer *cbuf;

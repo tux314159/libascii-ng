@@ -1,7 +1,7 @@
 #include <llist.h>
 
 /* PUBLIC UTILITY FUNCTIONS */
-struct llist_node *llist_getnode(struct llist *in, const size_t idx)
+struct llist_node *llist_getnode(struct llist *const in, const size_t idx)
 {
     size_t i;
     struct llist_node *p;
@@ -17,7 +17,7 @@ struct llist_node *llist_getnode(struct llist *in, const size_t idx)
 }
 
 /* INIT/DEINIT */
-enum la_status llist_init(struct llist *in, const size_t dsize)
+enum la_status llist_init(struct llist *const in, const size_t dsize)
 {
     NULLCHK(in);
 
@@ -29,7 +29,7 @@ enum la_status llist_init(struct llist *in, const size_t dsize)
     return LASCII_OK;
 }
 
-void llist_deinit(struct llist *in)
+void llist_deinit(struct llist *const in)
 {
     struct llist_node *p;
 
@@ -40,7 +40,11 @@ void llist_deinit(struct llist *in)
 
 
 /* INSERT */
-struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const void *val)
+struct llist_node *llist_addnode(
+                                 struct llist *const in,
+                                 struct llist_node *const nod,
+                                 const void *const val
+                                )
 {
     struct llist_node *new;
 
@@ -76,7 +80,7 @@ struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const
     return new;
 }
 
-struct llist_node *llist_pushfront(struct llist *in, const void *val)
+struct llist_node *llist_pushfront(struct llist *const in, const void *const val)
 {
     struct llist_node *new;
 
@@ -109,7 +113,7 @@ struct llist_node *llist_pushfront(struct llist *in, const void *val)
     return new;
 }
 
-struct llist_node *llist_pushback(struct llist *in, const void *val)
+struct llist_node *llist_pushback(struct llist *const in, const void *const val)
 {
     struct llist_node *new;
 
@@ -144,7 +148,7 @@ struct llist_node *llist_pushback(struct llist *in, const void *val)
 
 /* Delete */
 
-void llist_delnode(struct llist *in, struct llist_node *nod)
+void llist_delnode(struct llist *const in, struct llist_node *const nod)
 {
     if (nod != in->head)
         nod->prev->next = nod->next;
@@ -163,14 +167,14 @@ void llist_delnode(struct llist *in, struct llist_node *nod)
     return;
 }
 
-void llist_popfront(struct llist *in)
+void llist_popfront(struct llist *const in)
 {
     llist_delnode(in, llist_getnode(in, 0));
 
     return;
 }
 
-void llist_popback(struct llist *in)
+void llist_popback(struct llist *const in)
 {
     struct llist_node *old;
 
@@ -191,7 +195,11 @@ void llist_popback(struct llist *in)
 
 /* RE-ORDERING */
 
-void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b)
+void llist_nodeswap(
+                    struct llist *const in,
+                    struct llist_node *const a,
+                    struct llist_node *const b
+                   )
 {
     if (a == NULL || b == NULL || a == b) { /* bruh */
         return;
