@@ -45,7 +45,7 @@ void ll_buf_write(void);
  * Returns:
  *  <la_status>
  */
-enum la_status ll_curs_mov(const struct screen_coord pos);
+enum la_status ll_curs_mov(struct screen_coord pos);
 
 /*
  * Function: ll_curs_invis

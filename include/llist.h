@@ -66,7 +66,7 @@ struct llist {
  *  in - list to operate on
  *  idx - position to get
  */
-struct llist_node *llist_getnode(struct llist *const in, const size_t idx);
+struct llist_node *llist_getnode(struct llist *in, size_t idx);
 
 /* Function: llist_init
  * Initialises a llist
@@ -75,7 +75,7 @@ struct llist_node *llist_getnode(struct llist *const in, const size_t idx);
  *  in - list to operate on
  *  dsize - size of data to be pushed into data
  */
-enum la_status llist_init(struct llist *const in, const size_t dsize);
+enum la_status llist_init(struct llist *in, size_t dsize);
 
 /* Function: llist_deinit
  * De-initialises a list
@@ -83,7 +83,7 @@ enum la_status llist_init(struct llist *const in, const size_t dsize);
  * Parameters:
  *  in - list to operate on
  */
-void llist_deinit(struct llist *const in);
+void llist_deinit(struct llist *in);
 
 /*
  * Function: llist_addnode
@@ -95,11 +95,7 @@ void llist_deinit(struct llist *const in);
  *  nod - node to push in after; if NULL, push to front.
  *  val - pointer to value to push
  */
-struct llist_node *llist_addnode(
-                                 struct llist *const in,
-                                 struct llist_node *const nod,
-                                 const void *val
-                                );
+struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const void *val);
 
 /*
  * Function: llist_pushfront
@@ -112,7 +108,7 @@ struct llist_node *llist_addnode(
  *  in - list to operate on
  *  val - pointer to value to push
  */
-struct llist_node *llist_pushfront(struct llist *const in, const void *const val);
+struct llist_node *llist_pushfront(struct llist *in, const void *val);
 
 /*
  * Function: llist_pushback
@@ -122,7 +118,7 @@ struct llist_node *llist_pushfront(struct llist *const in, const void *const val
  *  in - list to operate on
  *  val - pointer to value to push
  */
-struct llist_node *llist_pushback(struct llist *const in, const void *const val);
+struct llist_node *llist_pushback(struct llist *in, const void *val);
 
 /*
  * Function: llist_delnode
@@ -132,7 +128,7 @@ struct llist_node *llist_pushback(struct llist *const in, const void *const val)
  *  in - list to operate on
  *  nod - pointer to node to delete
  */
-void llist_delnode(struct llist *const in, struct llist_node *const nod);
+void llist_delnode(struct llist *const in, struct llist_node *nod);
 
 /*
  * Function: llist_popfront
@@ -141,7 +137,7 @@ void llist_delnode(struct llist *const in, struct llist_node *const nod);
  * Parameters:
  *  in - list to operate on
  */
-void llist_popfront(struct llist *const in);
+void llist_popfront(struct llist *in);
 
 /*
  * Function: llist_popback
@@ -150,7 +146,7 @@ void llist_popfront(struct llist *const in);
  * Parameters:
  *  in - list to operate on
  */
-void llist_popback(struct llist *const in);
+void llist_popback(struct llist *in);
 
 /*
  * Function: llist_nodeswap
@@ -160,11 +156,8 @@ void llist_popback(struct llist *const in);
  * Parameters:
  *  in - linked list both a and b are in; assumed to be correct
  *  a  - first node
- *  b  - second node */
-void llist_nodeswap(
-                    struct llist *const in,
-                    struct llist_node *const a,
-                    struct llist_node *const b
-                   );
+ *  b  - second node
+ */
+void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b);
 
 #endif /* LLIST_H */

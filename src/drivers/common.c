@@ -29,7 +29,7 @@ void ll_buf_write(void)
     return;
 }
 
-enum la_status ll_curs_mov(const struct screen_coord pos)
+enum la_status ll_curs_mov(struct screen_coord pos)
 {
     _la_state->ll_curs_mov(pos);
     _la_state->curs_pos = (struct screen_coord){1, 1};

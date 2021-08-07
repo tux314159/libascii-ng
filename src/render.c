@@ -1,6 +1,6 @@
 #include <render.h>
 
-enum la_status rr_curs_mov(const struct screen_coord pos)
+enum la_status rr_curs_mov(struct screen_coord pos)
 {
     _la_state->rr_curs_pos = pos;
     return LASCII_OK;
@@ -18,12 +18,12 @@ void rr_curs_invis(void)
     return;
 }
 
-void rr_scr_putc(const char in, const struct screen_coord pos)
+void rr_scr_putc(char in, struct screen_coord pos)
 {
     _la_state->rr_curframe[pos.y][pos.x] = in;
 }
 
-void rr_scr_puts(const char *in, const struct screen_coord pos)
+void rr_scr_puts(const char *in, struct screen_coord pos)
 {
     const int len = strlen(in);
 
@@ -32,7 +32,7 @@ void rr_scr_puts(const char *in, const struct screen_coord pos)
     }
 }
 
-void rr_scr_puts_len(const char *in, const struct screen_coord pos, const size_t len)
+void rr_scr_puts_len(const char *in, struct screen_coord pos, size_t len)
 {
     for (size_t i = 0; i < len; i++) {
         rr_scr_putc(*(in + i), (struct screen_coord){pos.x + i, pos.y});

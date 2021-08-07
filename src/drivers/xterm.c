@@ -1,6 +1,6 @@
 #include <drivers/xterm.h>
 
-void xterm_curs_mov(const struct screen_coord pos)
+void xterm_curs_mov(struct screen_coord pos)
 {
     vt100_curs_mov(pos);
     return;

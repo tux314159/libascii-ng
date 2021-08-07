@@ -25,8 +25,8 @@
  *  borderS     - south/bottom border
  *  borderW     - west/left border */
 struct llist_node *ws_frame_new(
-                                const struct screen_coord pos, const struct winsz winsz,
-                                struct llist_node *const stackpos, char borderN,
+                                struct screen_coord pos, struct winsz winsz,
+                                struct llist_node *stackpos, char borderN,
                                 char borderE, char borderS, char borderW
                                );
 
@@ -35,18 +35,18 @@ struct llist_node *ws_frame_new(
  * Parameters:
  *  frameptr    - frame to bind to
  *  bufid       - buffer to bind */
-void ws_frame_bind_buf(struct llist_node *frameptr, const int bufid);
+void ws_frame_bind_buf(struct llist_node *frameptr, int bufid);
 
 /* Function: ws_frame_mv
  * Moves a frame to a new position.
  * Parameters:
  *  frameid - id of the frame to be moved
  *  pos     - position to move it to */
-void ws_frame_mv(struct llist_node *const frameptr, const struct screen_coord pos);
+void ws_frame_mv(struct llist_node *frameptr, struct screen_coord pos);
 
 /* Function: ws_frame_rs
  * Resizes a frame. */
-void ws_frame_rs(struct llist_node *const frameptr, const struct winsz ws);
+void ws_frame_rs(struct llist_node *frameptr, struct winsz ws);
 
 /* Function: ws_frame_swapstackpos
  * Moves a frame in front or behind by one. Does nothing if impossible.
@@ -54,7 +54,7 @@ void ws_frame_rs(struct llist_node *const frameptr, const struct winsz ws);
  * Parameters:
  *  frameptr  - frame to move
  *  forward_p - if true, moves in front; else, moves behind */
-void ws_frame_swapstackpos(struct llist_node *const frameptr, const bool forward_p);
+void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
 
 /* Function: ws_frame_focus
  * Sets a frame as the focused frame
@@ -62,7 +62,7 @@ void ws_frame_swapstackpos(struct llist_node *const frameptr, const bool forward
  * Parameters:
  *  frameptr - frame to focus
  */
-void ws_frame_focus(struct llist_node *const frameptr);
+void ws_frame_focus(struct llist_node *frameptr);
 
 /* Function: ws_buf_new
  * Creates a new buffer. */
@@ -74,14 +74,14 @@ int ws_buf_new(void);
  *  bufid - buffer id to free
  * Warning:
  *  Do not use the buffer after freeing! */
-void ws_buf_free(const int bufid);
+void ws_buf_free(int bufid);
 
 /* Function: ws_buf_aline
  * Appends a line to a buffer.
  * Parameters:
  *  bufid - buffer to append line to
  *  str   - string to append */
-void ws_buf_aline(const int bufid, const char *const str);
+void ws_buf_aline(int bufid, const char *str);
 
 /* Function: ws_render
  * Renders everything */

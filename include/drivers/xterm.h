@@ -5,7 +5,7 @@
 #include <drivers/common.h>
 #include <drivers/vt100.h>
 
-void xterm_curs_mov(const struct screen_coord pos);
+void xterm_curs_mov(struct screen_coord pos);
 void xterm_curs_invis(void);
 void xterm_curs_vis(void);
 void xterm_scr_clear(void);

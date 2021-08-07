@@ -23,7 +23,7 @@ enum la_status string_deinit(struct string *in)
 }
 
 /* MISC */
-enum la_status string_grow(struct string *in, const size_t add)
+enum la_status string_grow(struct string *in, size_t add)
 {
 	char *t;
 
@@ -53,7 +53,7 @@ enum la_status string_append(struct string *in, const char *str)
 	return LASCII_OK;
 }
 
-enum la_status string_insert(struct string *in, const size_t idx, const char *str)
+enum la_status string_insert(struct string *in, size_t idx, const char *str)
 {
 	size_t oldlen;
 	size_t len;
@@ -72,7 +72,7 @@ enum la_status string_insert(struct string *in, const size_t idx, const char *st
 	return LASCII_OK;
 }
 
-enum la_status string_delete(struct string *in, const size_t start, const size_t end)
+enum la_status string_delete(struct string *in, size_t start, size_t end)
 {
 	NULLCHK(in);
 	if (in->len == 0 || end > in->len - 1)

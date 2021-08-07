@@ -68,7 +68,7 @@ enum la_status string_deinit(struct string *in);
  *  The new space will be uninitialised, save for the final
  *  NULL byte.
  */
-enum la_status string_grow(struct string *in, const size_t add);
+enum la_status string_grow(struct string *in, size_t add);
 
 /* Function: string_append
  * Appends a C char array to a string
@@ -98,7 +98,7 @@ enum la_status string_append(struct string *in, const char *str);
  * Note:
  *  str must be NULL-terminated.
  */
-enum la_status string_insert(struct string *in, const size_t idx, const char *str);
+enum la_status string_insert(struct string *in, size_t idx, const char *str);
 
 /* Function: string_delete
  * Deletes characters from start to end inclusively.
@@ -110,6 +110,6 @@ enum la_status string_insert(struct string *in, const size_t idx, const char *st
  * Returns:
  *  <la_status>
  */
-enum la_status string_delete(struct string *in, const size_t start, const size_t end);
+enum la_status string_delete(struct string *in, size_t start, size_t end);
 
 #endif /* DSTRING_H */

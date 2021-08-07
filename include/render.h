@@ -13,7 +13,7 @@
  * Returns:
  *  <la_status>
  */
-enum la_status rr_curs_mov(const struct screen_coord pos);
+enum la_status rr_curs_mov(struct screen_coord pos);
 
 /*
  * Function: rr_curs_vis
@@ -38,7 +38,7 @@ void rr_curs_invis(void);
  * Returns:
  *  <la_status>
  */
-void rr_scr_putc(const char in, const struct screen_coord pos);
+void rr_scr_putc(char in, struct screen_coord pos);
 
 /*
  * Function: rr_scr_puts
@@ -51,7 +51,7 @@ void rr_scr_putc(const char in, const struct screen_coord pos);
  * Returns:
  *  <la_status>
  */
-void rr_scr_puts(const char *in, const struct screen_coord pos);
+void rr_scr_puts(const char *in, struct screen_coord pos);
 
 /*
  * Function: rr_scr_puts_len
@@ -65,7 +65,7 @@ void rr_scr_puts(const char *in, const struct screen_coord pos);
  * Returns:
  *  <la_status>
  */
-void rr_scr_puts_len(const char *in, const struct screen_coord pos, const size_t len);
+void rr_scr_puts_len(const char *in, struct screen_coord pos, size_t len);
 
 /*
  * Function: rr_scr_render

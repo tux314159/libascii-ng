@@ -80,7 +80,7 @@ struct la_state {
     struct  termios         raw_termios;
 
     /* Function pointers to the appropriate driver-specific function */
-    void (*ll_curs_mov)(const struct screen_coord);
+    void (*ll_curs_mov)(struct screen_coord);
     void (*ll_curs_vis)(void);
     void (*ll_curs_invis)(void);
     void (*ll_scr_clear)(void);

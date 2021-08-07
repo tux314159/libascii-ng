@@ -1,6 +1,6 @@
 #include <drivers/vt100.h>
 
-void vt100_curs_mov(const struct screen_coord pos)
+void vt100_curs_mov(struct screen_coord pos)
 {
     char buf[16];
     memset(buf, '\0', 16 * sizeof(char));
