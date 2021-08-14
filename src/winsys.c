@@ -42,8 +42,11 @@ void ws_frame_rs(struct llist_node *frameptr, struct winsz ws)
 
 int ws_buf_new(void)
 {
-    const int       n_buf       = _la_state->ws_n_bufs;
-    struct buffer   *tempbufs   = realloc(_la_state->ws_bufs, (n_buf+1) * sizeof(struct buffer));
+    const size_t       n_buf    = _la_state->ws_n_bufs;
+    struct buffer   *tempbufs   = realloc(
+                                            _la_state->ws_bufs,
+                                            (n_buf+1) * sizeof(struct buffer)
+                                         );
     if (tempbufs == NULL) {
         return -1;
     }
@@ -152,8 +155,9 @@ static void ws_render_1f(struct frame *cframe)
                     cframe->pos.x + 1,
                     j - cframe->scroll_v + cframe->pos.y + 1
                 },
-                cbuf->buf[j]->len < cframe->winsz.w - 2 ? cbuf->buf[j]->len :
-                                                          cframe->winsz.w - 2
+                cbuf->buf[j]->len < (unsigned)cframe->winsz.w - 2 ?
+                    cbuf->buf[j]->len :
+                    (unsigned)cframe->winsz.w - 2
         );
     }
 }

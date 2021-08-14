@@ -1,7 +1,9 @@
 -std=gnu99
 -Iinclude
+-pedantic
 -Wall
 -Wextra
+-Wpedantic
 -Wbad-function-cast
 -Wcast-align
 -Wcast-qual

@@ -99,8 +99,8 @@ struct la_state {
     /**/
 
     /* Windowing system */
-    int                 ws_n_frames;
-    int                 ws_n_bufs;
+    size_t              ws_n_frames;
+    size_t              ws_n_bufs;
     struct llist        ws_frames;
     struct buffer       *ws_bufs;
     struct llist_node   *ws_focused_frame; /* Most frame ops are done on this one */
