@@ -27,8 +27,8 @@ enum driver_t {
  * This should be pretty self-explanatory
  */
 struct screen_coord {
-    short x;
-    short y;
+    unsigned short x;
+    unsigned short y;
 };
 
 /*
@@ -36,8 +36,8 @@ struct screen_coord {
  * Same thing as <screen_coord>, really
  */
 struct winsz {
-    short w;
-    short h;
+    unsigned short w;
+    unsigned short h;
 };
 
 /*

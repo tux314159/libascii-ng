@@ -46,9 +46,9 @@ enum la_status lascii_init(void)
     memset(&_la_state->raw_termios, 0, sizeof(struct termios));
     tcgetattr(STDIN_FILENO, &_la_state->orig_termios);
     _la_state->raw_termios = _la_state->raw_termios;
-    _la_state->raw_termios.c_iflag &= ~(ICRNL | IXON);
-    _la_state->raw_termios.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
-    _la_state->raw_termios.c_oflag &= ~(OPOST);
+    _la_state->raw_termios.c_iflag &= ~(unsigned int)(ICRNL | IXON);
+    _la_state->raw_termios.c_lflag &= ~(unsigned int)(ECHO | ICANON | ISIG | IEXTEN);
+    _la_state->raw_termios.c_oflag &= ~(unsigned int)(OPOST);
     _la_state->raw_termios.c_cc[VMIN] = 1;
     _la_state->raw_termios.c_cc[VTIME] = 0;
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_la_state->raw_termios);

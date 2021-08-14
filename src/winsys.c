@@ -98,11 +98,6 @@ void ws_frame_focus(struct llist_node *frameptr)
 }
 
 /* Gets kinda ugly here */
-
-static inline int min(int a, int b) {
-    return a < b ? a : b;
-}
-
 static void ws_render_1f(struct frame *cframe)
 {
     /* Render a single frame */
@@ -157,7 +152,8 @@ static void ws_render_1f(struct frame *cframe)
                     cframe->pos.x + 1,
                     j - cframe->scroll_v + cframe->pos.y + 1
                 },
-                min(cbuf->buf[j]->len, cframe->winsz.w - 2)
+                cbuf->buf[j]->len < cframe->winsz.w - 2 ? cbuf->buf[j]->len :
+                                                          cframe->winsz.w - 2
         );
     }
 }

@@ -3,36 +3,17 @@ BUILDDIR = build
 
 V = @
 
-WARNINGS += -Wall
-WARNINGS += -Wextra
-#WARNINGS += -Waggregate-return
-WARNINGS += -Wbad-function-cast
-WARNINGS += -Wcast-align
-WARNINGS += -Wcast-qual
-WARNINGS += -Wdeclaration-after-statement
-WARNINGS += -Wfloat-equal
-WARNINGS += -Wformat=2
-WARNINGS += -Wmissing-declarations
-WARNINGS += -Wmissing-include-dirs
-WARNINGS += -Wmissing-prototypes
-WARNINGS += -Wnested-externs
-WARNINGS += -Wpointer-arith
-WARNINGS += -Wredundant-decls
-WARNINGS += -Wsequence-point
-WARNINGS += -Wshadow
-WARNINGS += -Wstrict-prototypes
-WARNINGS += -Wswitch
-WARNINGS += -Wundef
-WARNINGS += -Wunreachable-code
-WARNINGS += -Wunused-parameter
-WARNINGS += -Wwrite-strings
-WARNINGS += -Werror
+WARNINGS += -Wall -Wextra -Wbad-function-cast -Wcast-align -Wcast-qual -Wdeclaration-after-statement \
+			-Wfloat-equal -Wformat=2 -Wmissing-declarations -Wmissing-include-dirs \
+			-Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wredundant-decls -Wsequence-point \
+			-Wshadow -Wsign-conversion -Wpedantic -Wstrict-prototypes -Wswitch -Wundef \
+			-Wunreachable-code -Wunused-parameter -Wwrite-strings -Werror
 
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR)
 LIBFLAGS = -L$(BUILDDIR) -lascii
-CFLAGS = -std=gnu99 -fsigned-char -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
+CFLAGS = -std=gnu99 -pedantic -fsigned-char -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
 
 CC = gcc
 AR = ar -rcs $@
