@@ -155,9 +155,9 @@ static void ws_render_1f(struct frame *cframe)
                     cframe->pos.x + 1,
                     j - cframe->scroll_v + cframe->pos.y + 1
                 },
-                cbuf->buf[j]->len < (unsigned)cframe->winsz.w - 2 ?
-                    cbuf->buf[j]->len :
-                    (unsigned)cframe->winsz.w - 2
+                cbuf->buf[j]->len < cframe->winsz.w - 2u
+                    ? cbuf->buf[j]->len
+                    : cframe->winsz.w - 2u
         );
     }
 }
