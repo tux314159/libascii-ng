@@ -114,6 +114,7 @@ extern struct la_state *_la_state; // actually defined in global.c
 
 #endif /* BASE_H */
 
+/* This is the reason why this file should be included last... */
 #ifndef _LA_LL_ABSTRACTED
  #define ll_curs_mov _la_state->ll_curs_mov
  #define ll_curs_vis _la_state->ll_curs_vis
