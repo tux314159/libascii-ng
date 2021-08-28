@@ -2,8 +2,8 @@
 #define RENDER_H
 
 #include <string.h>
-#include <base.h>
 #include <drivers/common.h>
+#include <base.h>
 
 /*
  * Function: rr_curs_mov

@@ -2,9 +2,9 @@
 #define FRAME_H
 
 #include <string.h>
-#include <base.h>
 #include <drivers/common.h>
 #include <render.h>
+#include <base.h>
 
 /* A window is made of two things: a frame and a buffer.
  * The frame is physically rendered onto the screen, while

@@ -58,9 +58,9 @@ enum la_status lascii_init(void)
 
     /* Screen clearing and stuff */
     ll_buf_clear();
-    ll_alt_scr_on();
-    ll_curs_mov((struct screen_coord){1, 1});
-    ll_curs_vis();
+    _la_state->ll_alt_scr_on();
+    _la_state->ll_curs_mov((struct screen_coord){1, 1});
+    _la_state->ll_curs_vis();
     ll_buf_write();
     ll_buf_clear();
     _la_state->rr_curs_vis_p = true;
@@ -71,8 +71,8 @@ enum la_status lascii_init(void)
 void lascii_deinit(void)
 {
     /* Reset screen */
-    ll_alt_scr_off();
-    ll_curs_vis();
+    _la_state->ll_alt_scr_off();
+    _la_state->ll_curs_vis();
     ll_buf_write();
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_la_state->orig_termios);
 

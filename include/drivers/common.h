@@ -1,6 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#define LA_DONT_ABSTRACT_LL
 #include <base.h>
 
 /* OUTPUT */

@@ -1,9 +1,10 @@
 #ifndef XTERM_H
 #define XTERM_H
 
-#include <base.h>
 #include <drivers/common.h>
 #include <drivers/vt100.h>
+#define LA_DONT_ABSTRACT_LL
+#include <base.h>
 
 void xterm_curs_mov(struct screen_coord pos);
 void xterm_curs_invis(void);

@@ -1,8 +1,9 @@
 #ifndef VT100_H
 #define VT100_H
 
-#include <base.h>
 #include <drivers/common.h>
+#define LA_DONT_ABSTRACT_LL
+#include <base.h>
 
 void vt100_curs_mov(struct screen_coord pos);
 void vt100_curs_invis(void);

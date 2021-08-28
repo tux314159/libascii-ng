@@ -1,10 +1,11 @@
 #ifndef INIT_H
 #define INIT_H
 
-#include <base.h>
 #include <drivers/common.h>
 #include <drivers/vt100.h>
 #include <drivers/xterm.h>
+#define _LA_LL_ABSTRACTED
+#include <base.h>
 
 /* Function: lascii_init
  * Initialises stuff. Must be run before any other libascii

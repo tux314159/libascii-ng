@@ -1,3 +1,7 @@
+/* ALWAYS INCLUDE THIS FILE LAST. IF YOU DON'T, IT WILL BUILD FINE
+ * AND WORK EXACTLY THE SAME AS OF 28 AUGUST 2021, BUT THAT IS SUBJECT
+ * TO CHANGE. A LOT OF IT.
+ */
 #ifndef BASE_H
 #define BASE_H
 
@@ -53,9 +57,9 @@ struct frame {
 
     int     boundbuf;
     bool    activep;
-    char    borders[4]; /* NESW */
-    size_t  scroll_v; /* how far we've scrolled (top line) */
-    size_t  scroll_h; /* how far we've scrolled (first char) */
+    char    borders[4]; // NESW
+    size_t  scroll_v; // how far we've scrolled (top line)
+    size_t  scroll_h; // how far we've scrolled (first char)
 
     char    *input_buffer;
 };
@@ -92,8 +96,8 @@ struct la_state {
 
     /* Renderer */
     struct screen_coord rr_curs_pos;
-    char                **rr_curframe; /* To be rendered next; writing happens here */
-    char                **rr_oldframe; /* Previous frame for deltas */
+    char                **rr_curframe; // To be rendered next; writing happens here
+    char                **rr_oldframe; // Previous frame for deltas */
     bool                rr_curs_vis_p;
 
     /**/
@@ -103,9 +107,32 @@ struct la_state {
     size_t              ws_n_bufs;
     struct llist        ws_frames;
     struct buffer       *ws_bufs;
-    struct llist_node   *ws_focused_frame; /* Most frame ops are done on this one */
+    struct llist_node   *ws_focused_frame; // Most frame ops are done on this one
 };
 
-extern struct la_state *_la_state; /* actually defined in global.c */
+extern struct la_state *_la_state; // actually defined in global.c
 
 #endif /* BASE_H */
+
+#ifndef _LA_LL_ABSTRACTED
+ #define ll_curs_mov _la_state->ll_curs_mov
+ #define ll_curs_vis _la_state->ll_curs_vis
+ #define ll_curs_invis _la_state->ll_curs_invis
+ #define ll_scr_clear _la_state->ll_curs_mov
+ #define ll_ln_clear _la_state->ll_curs_mov
+ #define ll_alt_scr_on _la_state->ll_curs_mov
+ #define ll_alt_scr_off _la_state->ll_curs_mov
+ #define _LA_LL_ABSTRACTED
+#endif /* _LA_LL_ABSTRACTED */
+
+#ifdef LA_DONT_ABSTRACT_LL
+ #undef ll_curs_mov
+ #undef ll_curs_vis
+ #undef ll_curs_invis
+ #undef ll_scr_clear
+ #undef ll_ln_clear
+ #undef ll_alt_scr_on
+ #undef ll_alt_scr_off
+ #undef _LA_LL_ABSTRACTED  // have been unabstracted
+ #undef LA_DONT_ABSTRACT_LL  // we don't want this to cascade
+#endif /* LA_DONT_ABSTRACT_LL */
