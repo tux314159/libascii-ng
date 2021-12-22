@@ -197,7 +197,8 @@ void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b
         return;
     }
 
-    /* note we cannot just swap data pointers here; we need to
+    /*
+     * note we cannot just swap data pointers here; we need to
      * preserve references to nodes.
      */
     if (a->next == b) {
