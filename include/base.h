@@ -122,6 +122,7 @@ extern struct la_state *_la_state; // actually defined in global.c
 #define _LA_LL_ABSTRACTED
 #endif /* _LA_LL_ABSTRACTED */
 
+// clang-format off
 #ifdef LA_DONT_ABSTRACT_LL
 #undef ll_curs_mov
 #undef ll_curs_vis
@@ -133,3 +134,4 @@ extern struct la_state *_la_state; // actually defined in global.c
 #undef _LA_LL_ABSTRACTED   // have been unabstracted
 #undef LA_DONT_ABSTRACT_LL // we don't want this to cascade
 #endif /* LA_DONT_ABSTRACT_LL */
+// clang-format on
