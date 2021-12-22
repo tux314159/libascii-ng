@@ -145,16 +145,17 @@ static void ws_render_1f(struct frame *cframe)
         return; /* nothing to look at here, move on! */
     }
     cbuf = &_la_state->ws_bufs[cframe->boundbuf];
-    for (size_t j = cframe->scroll_v; j < cframe->scroll_v + cframe->winsz.h;
-         ++j) {
-        if (j >= cbuf->n_lines) {
+    for (size_t j = 0; j < cframe->winsz.h; ++j) {
+        size_t jj = j + cframe->scroll_v;
+
+        if (jj >= cbuf->n_lines) {
             break;
         }
         rr_scr_puts_len(
-            cbuf->buf[j]->str,
+            cbuf->buf[jj]->str,
             (struct screen_coord){
                 cframe->pos.x + 1,
-                j - cframe->scroll_v + cframe->pos.y + 1},
+                jj - cframe->scroll_v + cframe->pos.y + 1},
             cbuf->buf[j]->len < cframe->winsz.w - 2u ? cbuf->buf[j]->len
                                                      : cframe->winsz.w - 2u);
     }
