@@ -1,7 +1,3 @@
-/* ALWAYS INCLUDE THIS FILE LAST. IF YOU DON'T, IT WILL BUILD FINE
- * AND WORK EXACTLY THE SAME AS OF 28 AUGUST 2021, BUT THAT IS SUBJECT
- * TO CHANGE. A LOT OF IT.
- */
 #ifndef BASE_H
 #define BASE_H
 
@@ -115,7 +111,6 @@ extern struct la_state *_la_state; // actually defined in global.c
 
 #endif /* BASE_H */
 
-/* This is the reason why this file should be included last... */
 #ifndef _LA_LL_ABSTRACTED
 #define ll_curs_mov    _la_state->ll_curs_mov
 #define ll_curs_vis    _la_state->ll_curs_vis
