@@ -3,11 +3,7 @@ BUILDDIR = build
 
 V = @
 
-WARNINGS += -Wall -Wextra -Wbad-function-cast -Wcast-align -Wcast-qual -Wdeclaration-after-statement \
-			-Wfloat-equal -Wformat=2 -Wmissing-declarations -Wmissing-include-dirs \
-			-Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wredundant-decls -Wsequence-point \
-			-Wshadow -Wsign-conversion -Wpedantic -Wstrict-prototypes -Wswitch -Wundef \
-			-Wunreachable-code -Wunused-parameter -Wwrite-strings -Werror
+WARNINGS += $(shell cat compile_flags.txt | tr '\n' ' ')
 
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
