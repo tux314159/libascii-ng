@@ -3,7 +3,7 @@
 /* PUBLIC UTILITY FUNCTIONS */
 struct llist_node *llist_getnode(struct llist *in, size_t idx)
 {
-    size_t i;
+    size_t             i;
     struct llist_node *p;
 
     if (in == NULL)
@@ -21,10 +21,10 @@ enum la_status llist_init(struct llist *in, size_t dsize)
 {
     NULLCHK(in);
 
-    in->len = 0;
+    in->len   = 0;
     in->dsize = dsize;
-    in->head = NULL;
-    in->tail = NULL;
+    in->head  = NULL;
+    in->tail  = NULL;
 
     return LASCII_OK;
 }
@@ -38,9 +38,9 @@ void llist_deinit(struct llist *in)
     free(in->tail);
 }
 
-
 /* INSERT */
-struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const void *val)
+struct llist_node *
+llist_addnode(struct llist *in, struct llist_node *nod, const void *val)
 {
     struct llist_node *new;
 
@@ -178,7 +178,7 @@ void llist_popback(struct llist *in)
 
     if (in->tail != in->head) {
         in->tail->prev->next = NULL;
-        in->tail = in->tail->prev;
+        in->tail             = in->tail->prev;
     }
 
     free(old->data);
@@ -191,7 +191,10 @@ void llist_popback(struct llist *in)
 
 /* RE-ORDERING */
 
-void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b)
+void llist_nodeswap(
+    struct llist      *in,
+    struct llist_node *a,
+    struct llist_node *b)
 {
     if (a == NULL || b == NULL || a == b) { /* bruh */
         return;
@@ -209,8 +212,12 @@ void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b
         a->prev = b;
 
         /* code style exception ehe */
-        if (a->next) { a->next->prev = a; }
-        if (b->prev) { b->prev->next = b; }
+        if (a->next) {
+            a->next->prev = a;
+        }
+        if (b->prev) {
+            b->prev->next = b;
+        }
     } else if (b->next == a) {
         /* x <-> b <-> a <-> y */
         b->next = a->next;
@@ -218,31 +225,51 @@ void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b
         a->prev = b->prev;
         b->prev = a;
 
-        if (b->next) { b->next->prev = b; }
-        if (a->prev) { a->prev->next = a; }
+        if (b->next) {
+            b->next->prev = b;
+        }
+        if (a->prev) {
+            a->prev->next = a;
+        }
     } else {
         /* w <-> a/b <-> x ... y <-> b/a <-> z */
         struct llist_node *t;
-        t = a->next;
+        t       = a->next;
         a->next = b->next;
         b->next = t;
-        t = a->prev;
+        t       = a->prev;
         a->prev = b->prev;
         b->prev = t;
 
-        if (a->next) { a->next->prev = a; }
-        if (a->prev) { a->prev->next = a; }
-        if (b->next) { b->next->prev = b; }
-        if (b->prev) { b->prev->next = b; }
+        if (a->next) {
+            a->next->prev = a;
+        }
+        if (a->prev) {
+            a->prev->next = a;
+        }
+        if (b->next) {
+            b->next->prev = b;
+        }
+        if (b->prev) {
+            b->prev->next = b;
+        }
     }
 
     {
         struct llist_node *t;
         t = in->head;
-        if (t == a) { in->head = b; }
-        if (t == b) { in->head = a; }
+        if (t == a) {
+            in->head = b;
+        }
+        if (t == b) {
+            in->head = a;
+        }
         t = in->tail;
-        if (t == a) { in->tail = b; }
-        if (t == b) { in->tail = a; }
+        if (t == a) {
+            in->tail = b;
+        }
+        if (t == b) {
+            in->tail = a;
+        }
     }
 }

@@ -25,9 +25,9 @@
  *  <TRAVERSE_LLIST_BACK>
  */
 #define TRAVERSE_LLIST(headptr, actions) \
-    while (headptr != NULL) { \
-        actions; \
-        headptr = headptr->next; \
+    while (headptr != NULL) {            \
+        actions;                         \
+        headptr = headptr->next;         \
     }
 
 /*
@@ -35,7 +35,7 @@
  * A node in an <llist>
  */
 struct llist_node {
-    void *data;
+    void              *data;
     struct llist_node *next;
     struct llist_node *prev;
 };
@@ -46,15 +46,15 @@ struct llist_node {
  * Supports pushback, pushfront, random insertion,
  * and the equivalant for popping. This struct should *only* be operated on by
  * the llist_* functions! Do not attempt to manually modify any of the members
- * manually; doing so will result in disastrous consequences. Except for the data
- * in nodes; you can modify them like this:
+ * manually; doing so will result in disastrous consequences. Except for the
+ * data in nodes; you can modify them like this:
  * === Code
  * memcpy(node->data, val, in->dsize);
  * ===
  */
 struct llist {
-    size_t len;
-    size_t dsize;
+    size_t             len;
+    size_t             dsize;
     struct llist_node *head;
     struct llist_node *tail;
 };
@@ -95,7 +95,8 @@ void llist_deinit(struct llist *in);
  *  nod - node to push in after; if NULL, push to front.
  *  val - pointer to value to push
  */
-struct llist_node *llist_addnode(struct llist *in, struct llist_node *nod, const void *val);
+struct llist_node *
+llist_addnode(struct llist *in, struct llist_node *nod, const void *val);
 
 /*
  * Function: llist_pushfront
@@ -158,6 +159,9 @@ void llist_popback(struct llist *in);
  *  a  - first node
  *  b  - second node
  */
-void llist_nodeswap(struct llist *in, struct llist_node *a, struct llist_node *b);
+void llist_nodeswap(
+    struct llist      *in,
+    struct llist_node *a,
+    struct llist_node *b);
 
 #endif /* LLIST_H */

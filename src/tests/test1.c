@@ -4,10 +4,14 @@
 #include <init.h>
 #include <render.h>
 
-#define wait1ms rr_curs_mov((struct screen_coord){5, 5}); ts.tv_sec = 0; ts.tv_nsec = 1000000; nanosleep(&ts, NULL);
+#define wait1ms                               \
+    rr_curs_mov((struct screen_coord){5, 5}); \
+    ts.tv_sec  = 0;                           \
+    ts.tv_nsec = 1000000;                     \
+    nanosleep(&ts, NULL);
 
 struct timespec ts;
-time_t t;
+time_t          t;
 
 int main(int argc, char **argv)
 {

@@ -59,7 +59,7 @@ struct winsz ll_scr_getsize(void)
     /* TODO: Maybe make this less platform-specific?
      * Maybe, just maybe... */
     struct winsize w;
-    struct winsz w2;
+    struct winsz   w2;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     w2.w = w.ws_col;
     w2.h = w.ws_row;
@@ -84,7 +84,7 @@ void ll_stdin_nonblock(void)
 {
     struct termios ttystate;
     tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_cc[VMIN] = 0;
+    ttystate.c_cc[VMIN]  = 0;
     ttystate.c_cc[VTIME] = 0;
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
     return;
@@ -94,7 +94,7 @@ void ll_stdin_block(void)
 {
     struct termios ttystate;
     tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_cc[VMIN] = 1;
+    ttystate.c_cc[VMIN]  = 1;
     ttystate.c_cc[VTIME] = 0;
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
     return;
@@ -103,7 +103,7 @@ void ll_stdin_block(void)
 char ll_stdin_getchar(void)
 {
     ssize_t ret;
-    char buf;
+    char    buf;
     ret = read(STDIN_FILENO, &buf, 1);
     if (ret == -1) {
         return -1;

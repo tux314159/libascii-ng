@@ -1,0 +1,52 @@
+---
+Language:        Cpp
+ColumnLimit:     80
+ForEachMacros:   ['HASH_ITER']
+
+AlignAfterOpenBracket:          AlwaysBreak
+AlignConsecutiveMacros:         Consecutive
+AlignConsecutiveAssignments:    Consecutive
+AlignConsecutiveBitFields:      Consecutive
+AlignConsecutiveDeclarations:   Consecutive
+AlignEscapedNewlines:           Left
+AlignOperands:                  Align
+AlignTrailingComments:          true
+
+AllowAllArgumentsOnNextLine:                false
+AllowAllParametersOfDeclarationOnNextLine:  false
+AllowShortEnumsOnASingleLine:               false
+AllowShortBlocksOnASingleLine:              Never
+AllowShortCaseLabelsOnASingleLine:          false
+AllowShortFunctionsOnASingleLine:           None
+AllowShortIfStatementsOnASingleLine:        Never
+
+BreakBeforeBraces:      Custom
+BraceWrapping:
+  AfterCaseLabel:       false
+  AfterEnum:            false
+  AfterFunction:        true
+  AfterStruct:          false
+  AfterUnion:           false
+  AfterExternBlock:     false
+  BeforeCatch:          false
+  BeforeElse:           false
+  BeforeWhile:          false
+  IndentBraces:         false
+  SplitEmptyFunction:   true
+
+DerivePointerAlignment: false
+PointerAlignment:       Right
+
+IndentWidth:        4
+IndentCaseLabels:   false
+IndentCaseBlocks:   false
+
+BinPackArguments: false
+BinPackParameters: false
+
+SortIncludes:                   true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon:           false
+UseCRLF:                        false
+UseTab:                         Never
+...

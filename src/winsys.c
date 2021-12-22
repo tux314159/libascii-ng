@@ -1,21 +1,26 @@
 #include <winsys.h>
 
-struct llist_node *ws_frame_new(struct screen_coord pos, struct winsz winsz,
-                                struct llist_node *stackpos, char borderN, char borderE,
-                                char borderS, char borderW)
+struct llist_node *ws_frame_new(
+    struct screen_coord pos,
+    struct winsz        winsz,
+    struct llist_node  *stackpos,
+    char                borderN,
+    char                borderE,
+    char                borderS,
+    char                borderW)
 {
-    struct frame    cframe;
+    struct frame cframe;
 
-    cframe.pos          = pos;
-    cframe.winsz        = winsz;
-    cframe.boundbuf     = -1;
-    cframe.activep      = true; /* active by default */
-    cframe.borders[0]   = borderN;
-    cframe.borders[1]   = borderE;
-    cframe.borders[2]   = borderS;
-    cframe.borders[3]   = borderW;
-    cframe.scroll_v	    = 0;
-    cframe.scroll_h	    = 0;
+    cframe.pos        = pos;
+    cframe.winsz      = winsz;
+    cframe.boundbuf   = -1;
+    cframe.activep    = true; /* active by default */
+    cframe.borders[0] = borderN;
+    cframe.borders[1] = borderE;
+    cframe.borders[2] = borderS;
+    cframe.borders[3] = borderW;
+    cframe.scroll_v   = 0;
+    cframe.scroll_h   = 0;
 
     _la_state->ws_n_frames += 1;
 
@@ -42,17 +47,15 @@ void ws_frame_rs(struct llist_node *frameptr, struct winsz ws)
 
 int ws_buf_new(void)
 {
-    const size_t       n_buf    = _la_state->ws_n_bufs;
-    struct buffer   *tempbufs   = realloc(
-                                            _la_state->ws_bufs,
-                                            (n_buf+1) * sizeof(struct buffer)
-                                         );
+    const size_t   n_buf = _la_state->ws_n_bufs;
+    struct buffer *tempbufs =
+        realloc(_la_state->ws_bufs, (n_buf + 1) * sizeof(struct buffer));
     if (tempbufs == NULL) {
         return -1;
     }
 
-    _la_state->ws_bufs = tempbufs;
-    _la_state->ws_bufs[n_buf].buf = malloc(0);
+    _la_state->ws_bufs                = tempbufs;
+    _la_state->ws_bufs[n_buf].buf     = malloc(0);
     _la_state->ws_bufs[n_buf].n_lines = 0;
 
     _la_state->ws_n_bufs += 1;
@@ -71,12 +74,10 @@ void ws_buf_free(int bufid)
 
 void ws_buf_aline(int bufid, const char *str)
 {
-    struct buffer *cbuf = &_la_state->ws_bufs[bufid];
-    struct string **tempbufbuf = realloc(
-            cbuf->buf,
-            (cbuf->n_lines+1) * sizeof(struct string *)
-    );
-    cbuf->buf = tempbufbuf;
+    struct buffer  *cbuf = &_la_state->ws_bufs[bufid];
+    struct string **tempbufbuf =
+        realloc(cbuf->buf, (cbuf->n_lines + 1) * sizeof(struct string *));
+    cbuf->buf                = tempbufbuf;
     cbuf->buf[cbuf->n_lines] = malloc(sizeof(struct string));
     string_init(cbuf->buf[cbuf->n_lines]);
     WS_BUF_OP(bufid, cbuf->n_lines, string_append, str);
@@ -89,8 +90,7 @@ void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p)
 {
     if (forward_p && frameptr->next) {
         llist_nodeswap(&_la_state->ws_frames, frameptr, frameptr->next);
-    }
-    else if (!forward_p && frameptr->prev) {
+    } else if (!forward_p && frameptr->prev) {
         llist_nodeswap(&_la_state->ws_frames, frameptr, frameptr->prev);
     }
 }
@@ -119,25 +119,25 @@ static void ws_render_1f(struct frame *cframe)
 
     /* Next two loops render borders */
     for (int j = 0; j < cframe->winsz.h; j++) { /* left & right */
-        rr_scr_putc(cframe->borders[3],
-                (struct screen_coord){cframe->pos.x, cframe->pos.y + j}
-        );
-        rr_scr_putc(cframe->borders[1], (struct screen_coord){
+        rr_scr_putc(
+            cframe->borders[3],
+            (struct screen_coord){cframe->pos.x, cframe->pos.y + j});
+        rr_scr_putc(
+            cframe->borders[1],
+            (struct screen_coord){
                 cframe->pos.x + cframe->winsz.w - 1,
-                cframe->pos.y + j
-            }
-        );
+                cframe->pos.y + j});
     }
 
     for (int j = 0; j < cframe->winsz.w; j++) { /* top & bottom */
-        rr_scr_putc(cframe->borders[0],
-                (struct screen_coord){cframe->pos.x + j, cframe->pos.y}
-        );
-        rr_scr_putc(cframe->borders[2], (struct screen_coord){
+        rr_scr_putc(
+            cframe->borders[0],
+            (struct screen_coord){cframe->pos.x + j, cframe->pos.y});
+        rr_scr_putc(
+            cframe->borders[2],
+            (struct screen_coord){
                 cframe->pos.x + j,
-                cframe->pos.y + cframe->winsz.h - 1
-            }
-        );
+                cframe->pos.y + cframe->winsz.h - 1});
     }
 
     /* Render buffer */
@@ -145,29 +145,29 @@ static void ws_render_1f(struct frame *cframe)
         return; /* nothing to look at here, move on! */
     }
     cbuf = &_la_state->ws_bufs[cframe->boundbuf];
-    for (size_t j = cframe->scroll_v; j < cframe->scroll_v + cframe->winsz.h; ++j) {
+    for (size_t j = cframe->scroll_v; j < cframe->scroll_v + cframe->winsz.h;
+         ++j) {
         if (j >= cbuf->n_lines) {
             break;
         }
         rr_scr_puts_len(
-                cbuf->buf[j]->str,
-                (struct screen_coord){
-                    cframe->pos.x + 1,
-                    j - cframe->scroll_v + cframe->pos.y + 1
-                },
-                cbuf->buf[j]->len < cframe->winsz.w - 2u
-                    ? cbuf->buf[j]->len
-                    : cframe->winsz.w - 2u
-        );
+            cbuf->buf[j]->str,
+            (struct screen_coord){
+                cframe->pos.x + 1,
+                j - cframe->scroll_v + cframe->pos.y + 1},
+            cbuf->buf[j]->len < cframe->winsz.w - 2u ? cbuf->buf[j]->len
+                                                     : cframe->winsz.w - 2u);
     }
 }
 
 void ws_render(void)
 {
-    const struct llist  *frames     = &_la_state->ws_frames;
-    struct llist_node   *cframecont = frames->head;
+    const struct llist *frames     = &_la_state->ws_frames;
+    struct llist_node  *cframecont = frames->head;
 
-    TRAVERSE_LLIST(cframecont, ws_render_1f((struct frame *)(cframecont->data)));
+    TRAVERSE_LLIST(
+        cframecont,
+        ws_render_1f((struct frame *)(cframecont->data)));
     rr_scr_render();
     return;
 }

@@ -1,10 +1,10 @@
 #ifndef DSTRING_H
 #define DSTRING_H
 
+#include <status.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-#include <status.h>
 
 /* Struct: string
  * A dynamic string.
@@ -17,19 +17,19 @@
  * But be careful that you do not write past the end of the buffer.
  */
 struct string {
-	/*
-	 * Property: len
-	 * Length of the vector.
-	 * Trying to access elements after this is
-	 * undefined behaviour.
-	 */
-	size_t len;
+    /*
+     * Property: len
+     * Length of the vector.
+     * Trying to access elements after this is
+     * undefined behaviour.
+     */
+    size_t len;
 
-	/*
-	 * Property: str
-	 * The C string used to store data
-	 */
-	char *str;
+    /*
+     * Property: str
+     * The C string used to store data
+     */
+    char *str;
 };
 
 /* Function: string_init

@@ -1,17 +1,17 @@
 #ifndef FRAME_H
 #define FRAME_H
 
-#include <string.h>
+#include <base.h>
 #include <drivers/common.h>
 #include <render.h>
-#include <base.h>
+#include <string.h>
 
 /* A window is made of two things: a frame and a buffer.
  * The frame is physically rendered onto the screen, while
  * buffers are buffers of text. Buffers may be _bound_
  * or _unbound_ from frames. */
 
-/* sometimes we don't use la_status because we need to return other 
+/* sometimes we don't use la_status because we need to return other
  * values as well */
 
 /* Function: ws_frame_new
@@ -19,16 +19,17 @@
  * Parameters:
  *  pos         - position of the top left corner
  *  winsz       - size of the frame
- *  stackpos    - pointer to frame to place this one before; if NULL, place at back.
- *  borderN     - north/top border 
- *  borderE     - east/right border
- *  borderS     - south/bottom border
- *  borderW     - west/left border */
+ *  stackpos    - pointer to frame to place this one before; if NULL, place at
+ * back. borderN     - north/top border borderE     - east/right border borderS
+ * - south/bottom border borderW     - west/left border */
 struct llist_node *ws_frame_new(
-                                struct screen_coord pos, struct winsz winsz,
-                                struct llist_node *stackpos, char borderN,
-                                char borderE, char borderS, char borderW
-                               );
+    struct screen_coord pos,
+    struct winsz        winsz,
+    struct llist_node  *stackpos,
+    char                borderN,
+    char                borderE,
+    char                borderS,
+    char                borderW);
 
 /* Function: ws_frame_bind_buf
  * Binds a frame to a buffer.
@@ -94,6 +95,7 @@ void ws_render(void);
  *  i       - the index
  *  f       - the operation; MUST BE ONE FROM <dstring.h>!!!
  *  ... - arguments to the function <f> */
-#define WS_BUF_OP(bufid, i, f, ...) (f(_la_state->ws_bufs[(bufid)].buf[i], ##__VA_ARGS__))
+#define WS_BUF_OP(bufid, i, f, ...) \
+    (f(_la_state->ws_bufs[(bufid)].buf[i], ##__VA_ARGS__))
 
 #endif /* FRAME_H */

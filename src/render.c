@@ -65,9 +65,10 @@ void rr_scr_render(void)
 
     /* Reset the stuff and update old frame */
     for (int i = 0; i < _la_state->scr_size.h; ++i) {
-        memcpy(_la_state->rr_oldframe[i], _la_state->rr_curframe[i],
-               sizeof(char) * _la_state->scr_size.w
-        );
+        memcpy(
+            _la_state->rr_oldframe[i],
+            _la_state->rr_curframe[i],
+            sizeof(char) * _la_state->scr_size.w);
     }
 
     return;

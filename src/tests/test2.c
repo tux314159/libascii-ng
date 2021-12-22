@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <string.h>
 #include <base.h>
+#include <drivers/vt100.h>
 #include <init.h>
 #include <render.h>
-#include <drivers/vt100.h>
+#include <stdio.h>
+#include <string.h>
 
 char x;
 char s[50];

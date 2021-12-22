@@ -1,9 +1,9 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <string.h>
-#include <drivers/common.h>
 #include <base.h>
+#include <drivers/common.h>
+#include <string.h>
 
 /*
  * Function: rr_curs_mov
