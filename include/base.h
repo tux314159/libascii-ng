@@ -132,4 +132,4 @@ extern struct la_state *_la_state; // actually defined in global.c
 #undef ll_alt_scr_off
 #undef _LA_LL_ABSTRACTED   // have been unabstracted
 #undef LA_DONT_ABSTRACT_LL // we don't want this to cascade
-#endif                     /* LA_DONT_ABSTRACT_LL */
+#endif /* LA_DONT_ABSTRACT_LL */
