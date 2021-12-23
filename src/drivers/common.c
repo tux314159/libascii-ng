@@ -104,6 +104,7 @@ char ll_stdin_getchar(void)
 {
     ssize_t ret;
     char    buf;
+    buf = 0; // to satisfy valgrind :p
     ret = read(STDIN_FILENO, &buf, 1);
     if (ret == -1) {
         return -1;

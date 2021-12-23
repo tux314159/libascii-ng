@@ -5,7 +5,8 @@ void ws_init(void)
     _la_ws_state = malloc(sizeof(*_la_ws_state));
     _la_ws_state->n_frames = 0;
     _la_ws_state->n_bufs   = 0;
-    llist_init(&_la_ws_state->frames, sizeof(struct frame));
+    _la_ws_state->frames   = malloc(sizeof(*_la_ws_state->frames));
+    llist_init(_la_ws_state->frames, sizeof(struct frame));
     _la_ws_state->bufs = malloc(0);
 
     return;
@@ -13,7 +14,16 @@ void ws_init(void)
 
 void ws_deinit(void)
 {
-    llist_deinit(&_la_ws_state->frames);
+    llist_deinit(_la_ws_state->frames);
+    free(_la_ws_state->frames);
+    for (size_t i = 0; i < _la_ws_state->n_bufs; i++) {
+        // can't just use ws_buf_free cos no guarantee it's contiguous
+        for (size_t j = 0; j < _la_ws_state->bufs[i].n_lines; j++) {
+            string_deinit(_la_ws_state->bufs[i].buf[j]);
+            free(_la_ws_state->bufs[i].buf[j]);
+        }
+        free(_la_ws_state->bufs[i].buf);
+    }
     free(_la_ws_state->bufs);
     free(_la_ws_state);
 }
@@ -42,7 +52,7 @@ struct llist_node *ws_frame_new(
 
     _la_ws_state->n_frames += 1;
 
-    return llist_addnode(&_la_ws_state->frames, stackpos, &cframe);
+    return llist_addnode(_la_ws_state->frames, stackpos, &cframe);
 }
 
 void ws_frame_bind_buf(struct llist_node *frameptr, int bufid)
@@ -87,7 +97,11 @@ void ws_buf_free(int bufid)
         string_deinit(cbuf->buf[i]);
         free(cbuf->buf[i]);
     }
+
+    _la_ws_state->n_bufs -= 1;
     free(_la_ws_state->bufs[bufid].buf);
+
+    return;
 }
 
 void ws_buf_aline(int bufid, const char *str)
@@ -107,9 +121,9 @@ void ws_buf_aline(int bufid, const char *str)
 void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p)
 {
     if (forward_p && frameptr->next) {
-        llist_nodeswap(&_la_ws_state->frames, frameptr, frameptr->next);
+        llist_nodeswap(_la_ws_state->frames, frameptr, frameptr->next);
     } else if (!forward_p && frameptr->prev) {
-        llist_nodeswap(&_la_ws_state->frames, frameptr, frameptr->prev);
+        llist_nodeswap(_la_ws_state->frames, frameptr, frameptr->prev);
     }
 }
 
@@ -183,7 +197,7 @@ static void ws_render_1f(struct frame *cframe)
 
 void ws_render(void)
 {
-    const struct llist *frames     = &_la_ws_state->frames;
+    const struct llist *frames     = _la_ws_state->frames;
     struct llist_node  *cframecont = frames->head;
 
     TRAVERSE_LLIST(

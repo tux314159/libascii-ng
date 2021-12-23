@@ -17,7 +17,7 @@
 struct la_ws_state {
     size_t             n_frames;
     size_t             n_bufs;
-    struct llist       frames;
+    struct llist      *frames;
     struct buffer     *bufs;
     struct llist_node *focused_frame; // Most frame ops are done on this one
 };
