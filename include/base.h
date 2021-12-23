@@ -67,10 +67,6 @@ struct la_state {
     char **rr_curframe; // To be rendered next; writing happens here
     char **rr_oldframe; // Previous frame for deltas */
     bool   rr_curs_vis_p;
-
-    /**/
-
-    /* Windowing system */
 };
 extern struct la_state *_la_state; // actually defined in global.c
 
