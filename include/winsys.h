@@ -66,7 +66,8 @@ void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
 void ws_frame_focus(struct llist_node *frameptr);
 
 /* Function: ws_buf_new
- * Creates a new buffer. */
+ * Creates a new buffer.
+ * */
 int ws_buf_new(void);
 
 /* Function: ws_buf_free
@@ -74,18 +75,21 @@ int ws_buf_new(void);
  * Parameters:
  *  bufid - buffer id to free
  * Warning:
- *  Do not use the buffer after freeing! */
+ *  Do not use the buffer after freeing!
+ */
 void ws_buf_free(int bufid);
 
 /* Function: ws_buf_aline
  * Appends a line to a buffer.
  * Parameters:
  *  bufid - buffer to append line to
- *  str   - string to append */
+ *  str   - string to append
+ */
 void ws_buf_aline(int bufid, const char *str);
 
 /* Function: ws_render
- * Renders everything */
+ * Renders everything
+ */
 void ws_render(void);
 
 /* Macro: WS_BUF_OP
@@ -94,7 +98,8 @@ void ws_render(void);
  *  bufid   - buffer to operate on
  *  i       - the index
  *  f       - the operation; MUST BE ONE FROM <dstring.h>!!!
- *  ... - arguments to the function <f> */
+ *  ... - arguments to the function <f>
+ */
 #define WS_BUF_OP(bufid, i, f, ...) \
     (f(_la_state->ws_bufs[(bufid)].buf[i], ##__VA_ARGS__))
 
