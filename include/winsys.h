@@ -8,20 +8,23 @@
 
 /* A window is made of two things: a frame and a buffer.
  * The frame is physically rendered onto the screen, while
- * buffers are buffers of text. Buffers may be _bound_
- * or _unbound_ from frames. */
+ * buffers are buffers of text. Buffers may be _bound_ to
+ * or _unbound_ from frames.
+ */
 
 /* sometimes we don't use la_status because we need to return other
- * values as well */
+ * values as well
+ */
 
 /* Function: ws_frame_new
  * Creates a new frame.
  * Parameters:
- *  pos         - position of the top left corner
- *  winsz       - size of the frame
- *  stackpos    - pointer to frame to place this one before; if NULL, place at
- * back. borderN     - north/top border borderE     - east/right border borderS
- * - south/bottom border borderW     - west/left border */
+ *  pos          - position of the top left corner
+ *  winsz        - size of the frame
+ *  stackpos     - pointer to frame to place this one before; if NULL,
+ *                 place at the back.
+ *  border[NESW] - {Top,Right,Bottom,Left} borders
+ */
 struct llist_node *ws_frame_new(
     struct screen_coord pos,
     struct winsz        winsz,
@@ -35,14 +38,16 @@ struct llist_node *ws_frame_new(
  * Binds a frame to a buffer.
  * Parameters:
  *  frameptr    - frame to bind to
- *  bufid       - buffer to bind */
+ *  bufid       - buffer to bind
+ */
 void ws_frame_bind_buf(struct llist_node *frameptr, int bufid);
 
 /* Function: ws_frame_mv
  * Moves a frame to a new position.
  * Parameters:
  *  frameid - id of the frame to be moved
- *  pos     - position to move it to */
+ *  pos     - position to move it to
+ */
 void ws_frame_mv(struct llist_node *frameptr, struct screen_coord pos);
 
 /* Function: ws_frame_rs
@@ -54,7 +59,8 @@ void ws_frame_rs(struct llist_node *frameptr, struct winsz ws);
  *
  * Parameters:
  *  frameptr  - frame to move
- *  forward_p - if true, moves in front; else, moves behind */
+ *  forward_p - if true, moves in front; else, moves behind
+ */
 void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
 
 /* Function: ws_frame_focus
@@ -67,7 +73,7 @@ void ws_frame_focus(struct llist_node *frameptr);
 
 /* Function: ws_buf_new
  * Creates a new buffer.
- * */
+ */
 int ws_buf_new(void);
 
 /* Function: ws_buf_free
