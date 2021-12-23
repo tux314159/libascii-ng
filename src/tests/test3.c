@@ -26,7 +26,8 @@ int main(void)
     struct llist_node *x0, *x1, *x2, *x3;
     (void)x0;
 
-    lascii_init();
+    ll_init();
+    ws_init();
     ll_stdin_nonblock();
     rr_curs_invis();
 
@@ -118,6 +119,7 @@ int main(void)
     ws_buf_free(y1);
     ws_buf_free(y2);
     ws_buf_free(y3);
-    lascii_deinit();
+    ws_deinit();
+    ll_deinit();
     return 0;
 }

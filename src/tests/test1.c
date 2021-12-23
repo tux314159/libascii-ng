@@ -20,7 +20,7 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    lascii_init();
+    ll_init();
     t = time(NULL);
     while (time(NULL) - t <= atoi(argv[1])) {
         rr_curs_mov((struct screen_coord){5, 5});
@@ -48,6 +48,6 @@ int main(int argc, char **argv)
         rr_scr_render();
         wait1ms;
     }
-    lascii_deinit();
+    ll_deinit();
     return 0;
 }

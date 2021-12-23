@@ -10,7 +10,7 @@ char s[50];
 
 int main(void)
 {
-    lascii_init();
+    ll_init();
     ll_stdin_block();
     rr_curs_invis();
     rr_scr_render();
@@ -23,5 +23,5 @@ int main(void)
 
     ll_stdin_getchar();
 
-    lascii_deinit();
+    ll_deinit();
 }

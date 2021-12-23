@@ -7,7 +7,7 @@
 #define _LA_LL_ABSTRACTED
 #include <base.h>
 
-/* Function: lascii_init
+/* Function: ll_init
  * Initialises stuff. Must be run before any other libascii
  * functions are called.
  *
@@ -16,12 +16,12 @@
  *  LASCII_ALLOC_FAIL if memory allocation fails
  *  LASCII_OK otherwise
  */
-enum la_status lascii_init(void);
+enum la_status ll_init(void);
 
 /* Function: lascii_deinit
  * De-initialises stuff. Do not call any other libascii
  * functions after this.
  */
-void lascii_deinit(void);
+void ll_deinit(void);
 
 #endif /* INIT_H */

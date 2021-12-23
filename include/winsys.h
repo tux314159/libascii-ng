@@ -6,15 +6,59 @@
 #include <render.h>
 #include <string.h>
 
-/* A window is made of two things: a frame and a buffer.
+/*A window is made of two things: a frame and a buffer.
  * The frame is physically rendered onto the screen, while
  * buffers are buffers of text. Buffers may be _bound_ to
  * or _unbound_ from frames.
  */
 
-/* sometimes we don't use la_status because we need to return other
- * values as well
+/* Global windowing system struct
  */
+struct la_ws_state {
+    size_t             n_frames;
+    size_t             n_bufs;
+    struct llist       frames;
+    struct buffer     *bufs;
+    struct llist_node *focused_frame; // Most frame ops are done on this one
+};
+extern struct la_ws_state *_la_ws_state; // actually defined in global.c
+
+/* Struct: frame
+ * A physical window on the screen;
+ * Not the frames in the renderer!
+ * May have at most one buffer bound to it.
+ */
+struct frame {
+    struct screen_coord pos;
+    struct screen_coord oldpos;
+    struct winsz        winsz;
+
+    int    boundbuf;
+    bool   activep;
+    char   borders[4]; // NESW
+    size_t scroll_v;   // how far we've scrolled (top line)
+    size_t scroll_h;   // how far we've scrolled (first char)
+
+    char *input_buffer;
+};
+
+/* Struct: buffer
+ * A text buffer that may be bound to a frame.
+ */
+struct buffer {
+    struct string **buf; /* one per line */
+    size_t          n_lines;
+};
+
+/* Function: ws_init
+ * Initialises the windowing subsystem.
+ */
+void ws_init(void);
+
+/* Function: ws_deinit
+ * Deinitialises the windowing subsystem.
+ */
+void ws_deinit(void);
 
 /* Function: ws_frame_new
  * Creates a new frame.
@@ -105,9 +149,9 @@ void ws_render(void);
  *  bufid   - buffer to operate on
  *  i       - the index
  *  f       - the operation; MUST BE ONE FROM <dstring.h>!!!
- *  ... - arguments to the function <f>
+ *  ...     - arguments to the function <f>
  */
 #define WS_BUF_OP(bufid, i, f, ...) \
-    (f(_la_state->ws_bufs[(bufid)].buf[i], ##__VA_ARGS__))
+    (f(_la_ws_state->bufs[(bufid)].buf[i], ##__VA_ARGS__))
 
 #endif /* FRAME_H */

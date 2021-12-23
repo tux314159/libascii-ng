@@ -41,35 +41,6 @@ struct winsz {
     unsigned short h;
 };
 
-/*
- * Struct: frame
- * A physical window on the screen;
- * Not the frames in the renderer!
- * May have at most one buffer bound to it.
- */
-struct frame {
-    struct screen_coord pos;
-    struct screen_coord oldpos;
-    struct winsz        winsz;
-
-    int    boundbuf;
-    bool   activep;
-    char   borders[4]; // NESW
-    size_t scroll_v;   // how far we've scrolled (top line)
-    size_t scroll_h;   // how far we've scrolled (first char)
-
-    char *input_buffer;
-};
-
-/*
- * Struct: buffer
- * A text buffer that may be bound to a frame.
- */
-struct buffer {
-    struct string **buf; /* one per line */
-    size_t          n_lines;
-};
-
 /* Global state */
 struct la_state {
     /* Lower-level */
@@ -100,13 +71,7 @@ struct la_state {
     /**/
 
     /* Windowing system */
-    size_t             ws_n_frames;
-    size_t             ws_n_bufs;
-    struct llist       ws_frames;
-    struct buffer     *ws_bufs;
-    struct llist_node *ws_focused_frame; // Most frame ops are done on this one
 };
-
 extern struct la_state *_la_state; // actually defined in global.c
 
 #endif /* BASE_H */

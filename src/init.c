@@ -1,6 +1,6 @@
 #include <init.h>
 
-enum la_status lascii_init(void)
+enum la_status ll_init(void)
 {
     /* Memory init */
     _la_state = calloc(sizeof(struct la_state), 1);
@@ -30,11 +30,6 @@ enum la_status lascii_init(void)
             ' ',
             _la_state->scr_size.w * sizeof(char));
     }
-    /* Window system */
-    _la_state->ws_n_frames = 0;
-    _la_state->ws_n_bufs   = 0;
-    llist_init(&_la_state->ws_frames, sizeof(struct frame));
-    _la_state->ws_bufs = malloc(0);
 
     /* Set driver stuff */
     /* TODO: detect terminal type and set driver and functions
@@ -76,7 +71,7 @@ enum la_status lascii_init(void)
     return LASCII_OK;
 }
 
-void lascii_deinit(void)
+void ll_deinit(void)
 {
     /* Reset screen */
     _la_state->ll_alt_scr_off();
@@ -91,8 +86,6 @@ void lascii_deinit(void)
     }
     free(_la_state->rr_curframe);
     free(_la_state->rr_oldframe);
-    llist_deinit(&_la_state->ws_frames);
-    free(_la_state->ws_bufs);
     /**/
     string_deinit(&_la_state->buf);
     free(_la_state);
