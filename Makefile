@@ -3,13 +3,12 @@ BUILDDIR = build
 
 V = @
 
-WARNINGS += $(shell cat compile_flags.txt | tr '\n' ' ')
-
 DEBUG = -g
 OPTIM = -O3 -march=native -mtune=native
 INCLUDEDIR = -I$(HEADERDIR)
 LIBFLAGS = -L$(BUILDDIR) -lascii
-CFLAGS = -std=gnu99 -pedantic -fsigned-char -fpic $(INCLUDEDIR) $(WARNINGS) $(DEBUG) $(OPTIM) -fno-common -MMD -MP -o $@
+CFLAGS = -fpic $(INCLUDEDIR) $(DEBUG) $(OPTIM) -MMD -MP -o $@
+CFLAGS += $(shell cat compile_flags.txt | tr '\n' ' ')
 
 CC = gcc
 AR = ar -rcs $@
