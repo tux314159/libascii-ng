@@ -111,9 +111,11 @@ static void ws_render_1f(struct frame *cframe)
     }
 
     /* blank the background for drawing */
-    for (int j = cframe->pos.x; j < cframe->pos.x + cframe->winsz.w; j++) {
-        for (int k = cframe->pos.y; k < cframe->pos.y + cframe->winsz.h; k++) {
-            rr_scr_putc(' ', (struct screen_coord){j, k});
+    for (int j = 1; j < cframe->winsz.w - 1; j++) {
+        for (int k = 1; k < cframe->winsz.h - 1; k++) {
+            rr_scr_putc(
+                ' ',
+                (struct screen_coord){j + cframe->pos.x, k + cframe->pos.y});
         }
     }
 
