@@ -10,8 +10,6 @@
  * Moves the virtual renderer cursor. This only affects
  * what the frame looks like after rendering, and does not
  * affect the positioning of anything.
- * Returns:
- *  <la_status>
  */
 enum la_status rr_curs_mov(struct screen_coord pos);
 
@@ -29,14 +27,11 @@ void rr_curs_invis(void);
 
 /*
  * Function: rr_scr_putc
- * Writes a character code to a cell on the screen
+ * Writes a character to a cell on the screen
  *
  * Parameters:
- *  in - what character sequence to write
+ *  in  - what character sequence to write; ignored iff NUL.
  *  pos - where to write it
- *
- * Returns:
- *  <la_status>
  */
 void rr_scr_putc(char in, struct screen_coord pos);
 
@@ -45,11 +40,8 @@ void rr_scr_putc(char in, struct screen_coord pos);
  * Writes a string to the screen
  *
  * Parameters:
- *  in - what character sequence to write
+ *  in  - what character sequence to write
  *  pos - where to write it (from the first character)
- *
- * Returns:
- *  <la_status>
  */
 void rr_scr_puts(const char *in, struct screen_coord pos);
 
@@ -58,12 +50,9 @@ void rr_scr_puts(const char *in, struct screen_coord pos);
  * Writes a string of length <len> to the screen
  *
  * Parameters:
- *  in - what character sequence to write
+ *  in  - what character sequence to write
  *  pos - where to write it (from the first character)
  *  len - length of string
- *
- * Returns:
- *  <la_status>
  */
 void rr_scr_puts_len(const char *in, struct screen_coord pos, size_t len);
 

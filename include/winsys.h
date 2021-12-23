@@ -23,7 +23,8 @@
  *  winsz        - size of the frame
  *  stackpos     - pointer to frame to place this one before; if NULL,
  *                 place at the back.
- *  border[NESW] - {Top,Right,Bottom,Left} borders
+ *  border[NESW] - {Top,Right,Bottom,Left} borders. If NUL, that border
+ *                 will not exist.
  */
 struct llist_node *ws_frame_new(
     struct screen_coord pos,

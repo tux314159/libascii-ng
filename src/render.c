@@ -20,7 +20,10 @@ void rr_curs_invis(void)
 
 void rr_scr_putc(char in, struct screen_coord pos)
 {
-    _la_state->rr_curframe[pos.y][pos.x] = in;
+    if (in != '\0') {
+        _la_state->rr_curframe[pos.y][pos.x] = in;
+    }
+    
 }
 
 void rr_scr_puts(const char *in, struct screen_coord pos)
