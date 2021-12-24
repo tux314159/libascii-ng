@@ -6,13 +6,15 @@
 #include <render.h>
 #include <string.h>
 
-/*A window is made of two things: a frame and a buffer.
+/*
+ * A window is made of two things: a frame and a buffer.
  * The frame is physically rendered onto the screen, while
  * buffers are buffers of text. Buffers may be _bound_ to
  * or _unbound_ from frames.
  */
 
-/* Global windowing system struct
+/*
+ * Global windowing system struct
  */
 struct la_ws_state {
     size_t             n_frames;
@@ -23,7 +25,8 @@ struct la_ws_state {
 };
 extern struct la_ws_state *_la_ws_state; // actually defined in global.c
 
-/* Struct: frame
+/*
+ * Struct: frame
  * A physical window on the screen;
  * Not the frames in the renderer!
  * May have at most one buffer bound to it.
@@ -42,7 +45,8 @@ struct frame {
     char *input_buffer;
 };
 
-/* Struct: buffer
+/*
+ * Struct: buffer
  * A text buffer that may be bound to a frame.
  */
 struct buffer {
@@ -50,17 +54,20 @@ struct buffer {
     size_t          n_lines;
 };
 
-/* Function: ws_init
+/*
+ * Function: ws_init
  * Initialises the windowing subsystem.
  */
 void ws_init(void);
 
-/* Function: ws_deinit
+/*
+ * Function: ws_deinit
  * Deinitialises the windowing subsystem.
  */
 void ws_deinit(void);
 
-/* Function: ws_frame_new
+/*
+ * Function: ws_frame_new
  * Creates a new frame.
  * Parameters:
  *  pos          - position of the top left corner
@@ -79,7 +86,8 @@ struct llist_node *ws_frame_new(
     char                borderS,
     char                borderW);
 
-/* Function: ws_frame_bind_buf
+/*
+ * Function: ws_frame_bind_buf
  * Binds a frame to a buffer.
  * Parameters:
  *  frameptr    - frame to bind to
@@ -87,7 +95,8 @@ struct llist_node *ws_frame_new(
  */
 void ws_frame_bind_buf(struct llist_node *frameptr, int bufid);
 
-/* Function: ws_frame_mv
+/*
+ * Function: ws_frame_mv
  * Moves a frame to a new position.
  * Parameters:
  *  frameid - id of the frame to be moved
@@ -95,11 +104,13 @@ void ws_frame_bind_buf(struct llist_node *frameptr, int bufid);
  */
 void ws_frame_mv(struct llist_node *frameptr, struct screen_coord pos);
 
-/* Function: ws_frame_rs
+/*
+ * Function: ws_frame_rs
  * Resizes a frame. */
 void ws_frame_rs(struct llist_node *frameptr, struct winsz ws);
 
-/* Function: ws_frame_swapstackpos
+/*
+ * Function: ws_frame_swapstackpos
  * Moves a frame in front or behind by one. Does nothing if impossible.
  *
  * Parameters:
@@ -108,7 +119,8 @@ void ws_frame_rs(struct llist_node *frameptr, struct winsz ws);
  */
 void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
 
-/* Function: ws_frame_focus
+/*
+ * Function: ws_frame_focus
  * Sets a frame as the focused frame
  *
  * Parameters:
@@ -116,12 +128,14 @@ void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
  */
 void ws_frame_focus(struct llist_node *frameptr);
 
-/* Function: ws_buf_new
+/*
+ * Function: ws_buf_new
  * Creates a new buffer.
  */
 int ws_buf_new(void);
 
-/* Function: ws_buf_free
+/*
+ * Function: ws_buf_free
  * Frees a buffer.
  * Parameters:
  *  bufid - buffer id to free
@@ -130,7 +144,8 @@ int ws_buf_new(void);
  */
 void ws_buf_free(int bufid);
 
-/* Function: ws_buf_aline
+/*
+ * Function: ws_buf_aline
  * Appends a line to a buffer.
  * Parameters:
  *  bufid - buffer to append line to
@@ -138,12 +153,14 @@ void ws_buf_free(int bufid);
  */
 void ws_buf_aline(int bufid, const char *str);
 
-/* Function: ws_render
+/*
+ * Function: ws_render
  * Renders everything
  */
 void ws_render(void);
 
-/* Macro: WS_BUF_OP
+/*
+ * Macro: WS_BUF_OP
  * Performs an operation to a buffer buffer.
  * Parameters:
  *  bufid   - buffer to operate on

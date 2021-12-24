@@ -14,7 +14,8 @@
 #include <llist.h>
 #include <status.h>
 
-/* Enum: driver_type
+/*
+ * Enum: driver_type
  * Enumerates driver types
  */
 enum driver_t
@@ -43,7 +44,6 @@ struct winsz {
 
 /* Global state */
 struct la_state {
-    /* Lower-level */
     enum driver_t       driver;
     struct string       buf;
     struct screen_coord curs_pos;
@@ -59,14 +59,6 @@ struct la_state {
     void (*ll_ln_clear)(void);
     void (*ll_alt_scr_on)(void);
     void (*ll_alt_scr_off)(void);
-
-    /**/
-
-    /* Renderer */
-    struct screen_coord rr_curs_pos;
-    char **rr_curframe; // To be rendered next; writing happens here
-    char **rr_oldframe; // Previous frame for deltas */
-    bool   rr_curs_vis_p;
 };
 extern struct la_state *_la_state; // actually defined in global.c
 

@@ -13,23 +13,6 @@ enum la_status ll_init(void)
 
     /* More memory init */
     RETIFNOK(string_init(&_la_state->buf));
-    /* Renderer */
-    _la_state->rr_curframe = malloc(_la_state->scr_size.h * sizeof(char *));
-    _la_state->rr_oldframe = malloc(_la_state->scr_size.h * sizeof(char *));
-    for (int i = 0; i < _la_state->scr_size.h; i++) {
-        _la_state->rr_curframe[i] =
-            malloc(_la_state->scr_size.w * sizeof(char));
-        _la_state->rr_oldframe[i] =
-            malloc(_la_state->scr_size.w * sizeof(char));
-        memset(
-            _la_state->rr_curframe[i],
-            ' ',
-            _la_state->scr_size.w * sizeof(char));
-        memset(
-            _la_state->rr_oldframe[i],
-            ' ',
-            _la_state->scr_size.w * sizeof(char));
-    }
 
     /* Set driver stuff */
     /* TODO: detect terminal type and set driver and functions
@@ -42,6 +25,7 @@ enum la_status ll_init(void)
     _la_state->ll_ln_clear    = &vt100_ln_clear;
     _la_state->ll_alt_scr_on  = &xterm_alt_scr_on;
     _la_state->ll_alt_scr_off = &xterm_alt_scr_off;
+
     /* Init the screen */
     /* Raw mode */
     memset(&_la_state->orig_termios, 0, sizeof(struct termios));
@@ -66,7 +50,6 @@ enum la_status ll_init(void)
     _la_state->ll_curs_vis();
     ll_buf_write();
     ll_buf_clear();
-    _la_state->rr_curs_vis_p = true;
 
     return LASCII_OK;
 }
@@ -80,13 +63,6 @@ void ll_deinit(void)
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &_la_state->orig_termios);
 
     /* Deallocate memory */
-    for (int i = 0; i < _la_state->scr_size.h; i++) {
-        free(_la_state->rr_curframe[i]);
-        free(_la_state->rr_oldframe[i]);
-    }
-    free(_la_state->rr_curframe);
-    free(_la_state->rr_oldframe);
-    /**/
     string_deinit(&_la_state->buf);
     free(_la_state);
 

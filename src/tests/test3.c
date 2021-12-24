@@ -27,6 +27,7 @@ int main(void)
     (void)x0;
 
     ll_init();
+    rr_init();
     ws_init();
     ll_stdin_nonblock();
     rr_curs_invis();
@@ -120,6 +121,7 @@ int main(void)
     ws_buf_free(y2);
     ws_buf_free(y3);
     ws_deinit();
+    rr_deinit();
     ll_deinit();
     return 0;
 }

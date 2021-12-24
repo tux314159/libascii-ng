@@ -11,6 +11,7 @@ char s[50];
 int main(void)
 {
     ll_init();
+    rr_init();
     ll_stdin_block();
     rr_curs_invis();
     rr_scr_render();
@@ -23,5 +24,6 @@ int main(void)
 
     ll_stdin_getchar();
 
+    rr_deinit();
     ll_deinit();
 }

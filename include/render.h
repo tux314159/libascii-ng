@@ -6,12 +6,36 @@
 #include <string.h>
 
 /*
+ * Structure: la_rr_state
+ * Global state struct for renderer.
+ */
+struct la_rr_state {
+    struct screen_coord curs_pos;
+    char **curframe; // To be rendered next; writing happens here
+    char **oldframe; // Previous frame for deltas
+    bool   curs_vis_p;
+};
+extern struct la_rr_state *_la_rr_state; // actually defined in global.c
+
+/*
+ * Function: rr_init
+ * Initialises the renderer subsystem.
+ */
+void rr_init(void);
+
+/*
+ * Function: rr_deinit
+ * Deinitialises the renderer subsystem.
+ */
+void rr_deinit(void);
+
+/*
  * Function: rr_curs_mov
  * Moves the virtual renderer cursor. This only affects
  * what the frame looks like after rendering, and does not
  * affect the positioning of anything.
  */
-enum la_status rr_curs_mov(struct screen_coord pos);
+void rr_curs_mov(struct screen_coord pos);
 
 /*
  * Function: rr_curs_vis
