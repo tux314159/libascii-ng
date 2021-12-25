@@ -40,13 +40,13 @@ int main(void)
         ' ',
         ' ',
         ' ');
-    y0 = ws_buf_new();
-    ws_buf_aline(
+    y0 = ws_tbuf_new();
+    ws_tbuf_aline(
         y0,
         "                     'h', 'j', 'k' and 'l' to move the window "
         "left/down/up/right; 'w' and 's' to bring it forwards/backwards. 'q' "
         "to quit.");
-    ws_frame_bind_buf(x0, y0);
+    ws_frame_bind_tbuf(x0, y0);
 
     x1 = ws_frame_new(
         (struct screen_coord){0, 0},
@@ -56,9 +56,9 @@ int main(void)
         '|',
         '-',
         '|');
-    y1 = ws_buf_new();
-    ws_buf_aline(y1, "Hello, world!");
-    ws_frame_bind_buf(x1, y1);
+    y1 = ws_tbuf_new();
+    ws_tbuf_aline(y1, "Hello, world!");
+    ws_frame_bind_tbuf(x1, y1);
 
     x2 = ws_frame_new(
         (struct screen_coord){20, 4},
@@ -68,10 +68,10 @@ int main(void)
         '|',
         '-',
         '|');
-    y2 = ws_buf_new();
-    ws_buf_aline(y2, "Whee!");
-    ws_buf_aline(y2, "How do you do?");
-    ws_frame_bind_buf(x2, y2);
+    y2 = ws_tbuf_new();
+    ws_tbuf_aline(y2, "Whee!");
+    ws_tbuf_aline(y2, "How do you do?");
+    ws_frame_bind_tbuf(x2, y2);
 
     c1 = 3;
     c2 = 8;
@@ -83,10 +83,10 @@ int main(void)
         '|',
         '-',
         '|');
-    y3 = ws_buf_new();
-    ws_buf_aline(y3, "");
-    ws_buf_aline(y3, "HALLO NIANNY!!! :DDDD");
-    ws_frame_bind_buf(x3, y3);
+    y3 = ws_tbuf_new();
+    ws_tbuf_aline(y3, "");
+    ws_tbuf_aline(y3, "HALLO NIANNY!!! :DDDD");
+    ws_frame_bind_tbuf(x3, y3);
 
     do {
         ws_render();
@@ -117,9 +117,9 @@ int main(void)
         ws_frame_mv(x3, (struct screen_coord){c1, c2});
     } while (c != 'q');
 
-    ws_buf_free(y1);
-    ws_buf_free(y2);
-    ws_buf_free(y3);
+    ws_tbuf_free(y1);
+    ws_tbuf_free(y2);
+    ws_tbuf_free(y3);
     ws_deinit();
     rr_deinit();
     ll_deinit();

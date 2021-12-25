@@ -7,9 +7,9 @@
 #include <string.h>
 
 /*
- * A window is made of two things: a frame and a buffer.
+ * A window is made of two things: a frame and a tbuffer.
  * The frame is physically rendered onto the screen, while
- * buffers are buffers of text. Buffers may be _bound_ to
+ * tbuffers are tbuffers of text. Buffers may be _bound_ to
  * or _unbound_ from frames.
  */
 
@@ -18,9 +18,9 @@
  */
 struct la_ws_state {
     size_t             n_frames;
-    size_t             n_bufs;
+    size_t             n_tbufs;
     struct llist      *frames;
-    struct buffer     *bufs;
+    struct tbuffer     *tbufs;
     struct llist_node *focused_frame; // Most frame ops are done on this one
 };
 extern struct la_ws_state *_la_ws_state; // actually defined in global.c
@@ -29,28 +29,28 @@ extern struct la_ws_state *_la_ws_state; // actually defined in global.c
  * Struct: frame
  * A physical window on the screen;
  * Not the frames in the renderer!
- * May have at most one buffer bound to it.
+ * May have at most one tbuffer bound to it.
  */
 struct frame {
     struct screen_coord pos;
     struct screen_coord oldpos;
     struct winsz        winsz;
 
-    int    boundbuf;
+    int    boundtbuf;
     bool   activep;
     char   borders[4]; // NESW
     size_t scroll_v;   // how far we've scrolled (top line)
     size_t scroll_h;   // how far we've scrolled (first char)
 
-    char *input_buffer;
+    char *input_tbuffer;
 };
 
 /*
- * Struct: buffer
- * A text buffer that may be bound to a frame.
+ * Struct: tbuffer
+ * A text tbuffer that may be bound to a frame.
  */
-struct buffer {
-    struct string **buf; /* one per line */
+struct tbuffer {
+    struct string **tbuf; /* one per line */
     size_t          n_lines;
 };
 
@@ -87,13 +87,13 @@ struct llist_node *ws_frame_new(
     char                borderW);
 
 /*
- * Function: ws_frame_bind_buf
- * Binds a frame to a buffer.
+ * Function: ws_frame_bind_tbuf
+ * Binds a frame to a tbuffer.
  * Parameters:
  *  frameptr    - frame to bind to
- *  bufid       - buffer to bind
+ *  tbufid       - tbuffer to bind
  */
-void ws_frame_bind_buf(struct llist_node *frameptr, int bufid);
+void ws_frame_bind_tbuf(struct llist_node *frameptr, int tbufid);
 
 /*
  * Function: ws_frame_mv
@@ -129,29 +129,29 @@ void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p);
 void ws_frame_focus(struct llist_node *frameptr);
 
 /*
- * Function: ws_buf_new
- * Creates a new buffer.
+ * Function: ws_tbuf_new
+ * Creates a new tbuffer (text buffer).
  */
-int ws_buf_new(void);
+int ws_tbuf_new(void);
 
 /*
- * Function: ws_buf_free
- * Frees a buffer.
+ * Function: ws_tbuf_free
+ * Frees a tbuffer.
  * Parameters:
- *  bufid - buffer id to free
+ *  tbufid - tbuffer id to free
  * Warning:
- *  Do not use the buffer after freeing!
+ *  Do not use the tbuffer after freeing!
  */
-void ws_buf_free(int bufid);
+void ws_tbuf_free(int tbufid);
 
 /*
- * Function: ws_buf_aline
- * Appends a line to a buffer.
+ * Function: ws_tbuf_aline
+ * Appends a line to a tbuffer.
  * Parameters:
- *  bufid - buffer to append line to
+ *  tbufid - tbuffer to append line to
  *  str   - string to append
  */
-void ws_buf_aline(int bufid, const char *str);
+void ws_tbuf_aline(int tbufid, const char *str);
 
 /*
  * Function: ws_render
@@ -161,14 +161,14 @@ void ws_render(void);
 
 /*
  * Macro: WS_BUF_OP
- * Performs an operation to a buffer buffer.
+ * Performs an operation on a tbuffer.
  * Parameters:
- *  bufid   - buffer to operate on
- *  i       - the index
- *  f       - the operation; MUST BE ONE FROM <dstring.h>!!!
- *  ...     - arguments to the function <f>
+ *  tbufid   - tbuffer to operate on
+ *  i        - the index
+ *  f        - the operation; MUST BE ONE FROM <dstring.h>!!!
+ *  ...      - arguments to the function <f>
  */
-#define WS_BUF_OP(bufid, i, f, ...) \
-    (f(_la_ws_state->bufs[(bufid)].buf[i], ##__VA_ARGS__))
+#define WS_TBUF_OP(tbufid, i, f, ...) \
+    (f(_la_ws_state->tbufs[(tbufid)].tbuf[i], ##__VA_ARGS__))
 
 #endif /* FRAME_H */

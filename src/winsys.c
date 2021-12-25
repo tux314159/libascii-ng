@@ -4,10 +4,10 @@ void ws_init(void)
 {
     _la_ws_state = malloc(sizeof(*_la_ws_state));
     _la_ws_state->n_frames = 0;
-    _la_ws_state->n_bufs   = 0;
+    _la_ws_state->n_tbufs   = 0;
     _la_ws_state->frames   = malloc(sizeof(*_la_ws_state->frames));
     llist_init(_la_ws_state->frames, sizeof(struct frame));
-    _la_ws_state->bufs = malloc(0);
+    _la_ws_state->tbufs = malloc(0);
 
     return;
 }
@@ -16,15 +16,15 @@ void ws_deinit(void)
 {
     llist_deinit(_la_ws_state->frames);
     free(_la_ws_state->frames);
-    for (size_t i = 0; i < _la_ws_state->n_bufs; i++) {
-        // can't just use ws_buf_free cos no guarantee it's contiguous
-        for (size_t j = 0; j < _la_ws_state->bufs[i].n_lines; j++) {
-            string_deinit(_la_ws_state->bufs[i].buf[j]);
-            free(_la_ws_state->bufs[i].buf[j]);
+    for (size_t i = 0; i < _la_ws_state->n_tbufs; i++) {
+        // can't just use ws_tbuf_free cos no guarantee it's contiguous
+        for (size_t j = 0; j < _la_ws_state->tbufs[i].n_lines; j++) {
+            string_deinit(_la_ws_state->tbufs[i].tbuf[j]);
+            free(_la_ws_state->tbufs[i].tbuf[j]);
         }
-        free(_la_ws_state->bufs[i].buf);
+        free(_la_ws_state->tbufs[i].tbuf);
     }
-    free(_la_ws_state->bufs);
+    free(_la_ws_state->tbufs);
     free(_la_ws_state);
 }
 
@@ -41,7 +41,7 @@ struct llist_node *ws_frame_new(
 
     cframe.pos        = pos;
     cframe.winsz      = winsz;
-    cframe.boundbuf   = -1;
+    cframe.boundtbuf   = -1;
     cframe.activep    = true; /* active by default */
     cframe.borders[0] = borderN;
     cframe.borders[1] = borderE;
@@ -55,9 +55,9 @@ struct llist_node *ws_frame_new(
     return llist_addnode(_la_ws_state->frames, stackpos, &cframe);
 }
 
-void ws_frame_bind_buf(struct llist_node *frameptr, int bufid)
+void ws_frame_bind_tbuf(struct llist_node *frameptr, int tbufid)
 {
-    ((struct frame *)frameptr->data)->boundbuf = bufid;
+    ((struct frame *)frameptr->data)->boundtbuf = tbufid;
     return;
 }
 
@@ -73,47 +73,47 @@ void ws_frame_rs(struct llist_node *frameptr, struct winsz ws)
     return;
 }
 
-int ws_buf_new(void)
+int ws_tbuf_new(void)
 {
-    const size_t   n_buf = _la_ws_state->n_bufs;
-    struct buffer *tempbufs =
-        realloc(_la_ws_state->bufs, (n_buf + 1) * sizeof(struct buffer));
-    if (tempbufs == NULL) {
+    const size_t   n_tbuf = _la_ws_state->n_tbufs;
+    struct tbuffer *temptbufs =
+        realloc(_la_ws_state->tbufs, (n_tbuf + 1) * sizeof(struct tbuffer));
+    if (temptbufs == NULL) {
         return -1;
     }
 
-    _la_ws_state->bufs                = tempbufs;
-    _la_ws_state->bufs[n_buf].buf     = malloc(0);
-    _la_ws_state->bufs[n_buf].n_lines = 0;
+    _la_ws_state->tbufs                = temptbufs;
+    _la_ws_state->tbufs[n_tbuf].tbuf     = malloc(0);
+    _la_ws_state->tbufs[n_tbuf].n_lines = 0;
 
-    _la_ws_state->n_bufs += 1;
-    return n_buf; /* our old copy */
+    _la_ws_state->n_tbufs += 1;
+    return n_tbuf; /* our old copy */
 }
 
-void ws_buf_free(int bufid)
+void ws_tbuf_free(int tbufid)
 {
-    struct buffer *cbuf = &_la_ws_state->bufs[bufid];
-    for (size_t i = 0; i < cbuf->n_lines; i++) {
-        string_deinit(cbuf->buf[i]);
-        free(cbuf->buf[i]);
+    struct tbuffer *ctbuf = &_la_ws_state->tbufs[tbufid];
+    for (size_t i = 0; i < ctbuf->n_lines; i++) {
+        string_deinit(ctbuf->tbuf[i]);
+        free(ctbuf->tbuf[i]);
     }
 
-    _la_ws_state->n_bufs -= 1;
-    free(_la_ws_state->bufs[bufid].buf);
+    _la_ws_state->n_tbufs -= 1;
+    free(_la_ws_state->tbufs[tbufid].tbuf);
 
     return;
 }
 
-void ws_buf_aline(int bufid, const char *str)
+void ws_tbuf_aline(int tbufid, const char *str)
 {
-    struct buffer  *cbuf = &_la_ws_state->bufs[bufid];
-    struct string **tempbufbuf =
-        realloc(cbuf->buf, (cbuf->n_lines + 1) * sizeof(struct string *));
-    cbuf->buf                = tempbufbuf;
-    cbuf->buf[cbuf->n_lines] = malloc(sizeof(struct string));
-    string_init(cbuf->buf[cbuf->n_lines]);
-    WS_BUF_OP(bufid, cbuf->n_lines, string_append, str);
-    cbuf->n_lines += 1;
+    struct tbuffer  *ctbuf = &_la_ws_state->tbufs[tbufid];
+    struct string **temptbuftbuf =
+        realloc(ctbuf->tbuf, (ctbuf->n_lines + 1) * sizeof(struct string *));
+    ctbuf->tbuf                = temptbuftbuf;
+    ctbuf->tbuf[ctbuf->n_lines] = malloc(sizeof(struct string));
+    string_init(ctbuf->tbuf[ctbuf->n_lines]);
+    WS_TBUF_OP(tbufid, ctbuf->n_lines, string_append, str);
+    ctbuf->n_lines += 1;
 
     return;
 }
@@ -136,7 +136,7 @@ void ws_frame_focus(struct llist_node *frameptr)
 static void ws_render_1f(struct frame *cframe)
 {
     /* Render a single frame */
-    const struct buffer *cbuf;
+    const struct tbuffer *ctbuf;
 
     if (!cframe->activep) {
         return; /* don't render if not active */
@@ -174,24 +174,24 @@ static void ws_render_1f(struct frame *cframe)
                 cframe->pos.y + cframe->winsz.h - 1});
     }
 
-    /* Render buffer */
-    if (cframe->boundbuf == -1) {
+    /* Render tbuffer */
+    if (cframe->boundtbuf == -1) {
         return; /* nothing to look at here, move on! */
     }
-    cbuf = &_la_ws_state->bufs[cframe->boundbuf];
+    ctbuf = &_la_ws_state->tbufs[cframe->boundtbuf];
     for (size_t j = 0; j < cframe->winsz.h; ++j) {
         size_t jj = j + cframe->scroll_v;
 
-        if (jj >= cbuf->n_lines) {
+        if (jj >= ctbuf->n_lines) {
             break;
         }
         rr_scr_puts_len(
-            cbuf->buf[jj]->str,
+            ctbuf->tbuf[jj]->str,
             (struct screen_coord){
                 cframe->pos.x + 1,
                 jj - cframe->scroll_v + cframe->pos.y + 1},
-            cbuf->buf[j]->len < cframe->winsz.w - 2u ? cbuf->buf[j]->len
-                                                     : cframe->winsz.w - 2u);
+            ctbuf->tbuf[j]->len < cframe->winsz.w - 2u ? ctbuf->tbuf[j]->len
+                                                       : cframe->winsz.w - 2u);
     }
 }
 
