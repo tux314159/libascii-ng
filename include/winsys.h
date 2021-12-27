@@ -20,7 +20,7 @@ struct la_ws_state {
     size_t             n_frames;
     size_t             n_tbufs;
     struct llist      *frames;
-    struct tbuffer     *tbufs;
+    struct tbuffer    *tbufs;
     struct llist_node *focused_frame; // Most frame ops are done on this one
 };
 extern struct la_ws_state *_la_ws_state; // actually defined in global.c
