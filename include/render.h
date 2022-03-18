@@ -11,9 +11,9 @@
  */
 struct la_rr_state {
     struct screen_coord curs_pos;
-    char **curframe; // To be rendered next; writing happens here
-    char **oldframe; // Previous frame for deltas
-    bool   curs_vis_p;
+    char              **curframe; // To be rendered next; writing happens here
+    char              **oldframe; // Previous frame for deltas
+    bool                curs_vis_p;
 };
 extern struct la_rr_state *_la_rr_state; // actually defined in global.c
 

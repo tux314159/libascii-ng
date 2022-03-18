@@ -4,8 +4,7 @@
 /* Enum: la_status
  * Enumerates the return values of functions
  */
-enum la_status
-{
+enum la_status {
     LASCII_OK         = -1,
     LASCII_STR_OOB    = -3,
     LASCII_ALLOC_FAIL = -4,

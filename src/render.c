@@ -2,7 +2,7 @@
 
 void rr_init(void)
 {
-    _la_rr_state = malloc(sizeof(*_la_rr_state));
+    _la_rr_state           = malloc(sizeof(*_la_rr_state));
     _la_rr_state->curframe = malloc(_la_state->scr_size.h * sizeof(char *));
     _la_rr_state->oldframe = malloc(_la_state->scr_size.h * sizeof(char *));
     for (int i = 0; i < _la_state->scr_size.h; i++) {
@@ -20,7 +20,7 @@ void rr_init(void)
             _la_state->scr_size.w * sizeof(char));
     }
     _la_rr_state->curs_vis_p = true;
-    _la_rr_state->curs_pos = (struct screen_coord){0, 0};
+    _la_rr_state->curs_pos   = (struct screen_coord){0, 0};
 
     return;
 }
@@ -61,7 +61,6 @@ void rr_scr_putc(char in, struct screen_coord pos)
     if (in != '\0') {
         _la_rr_state->curframe[pos.y][pos.x] = in;
     }
-    
 }
 
 void rr_scr_puts(const char *in, struct screen_coord pos)

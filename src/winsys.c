@@ -2,9 +2,9 @@
 
 void ws_init(void)
 {
-    _la_ws_state = malloc(sizeof(*_la_ws_state));
+    _la_ws_state           = malloc(sizeof(*_la_ws_state));
     _la_ws_state->n_frames = 0;
-    _la_ws_state->n_tbufs   = 0;
+    _la_ws_state->n_tbufs  = 0;
     _la_ws_state->frames   = malloc(sizeof(*_la_ws_state->frames));
     llist_init(_la_ws_state->frames, sizeof(struct frame));
     _la_ws_state->tbufs = malloc(0);
@@ -41,7 +41,7 @@ struct llist_node *ws_frame_new(
 
     cframe.pos        = pos;
     cframe.winsz      = winsz;
-    cframe.boundtbuf   = -1;
+    cframe.boundtbuf  = -1;
     cframe.activep    = true; /* active by default */
     cframe.borders[0] = borderN;
     cframe.borders[1] = borderE;
@@ -75,15 +75,15 @@ void ws_frame_rs(struct llist_node *frameptr, struct winsz ws)
 
 int ws_tbuf_new(void)
 {
-    const size_t   n_tbuf = _la_ws_state->n_tbufs;
+    const size_t    n_tbuf = _la_ws_state->n_tbufs;
     struct tbuffer *temptbufs =
         realloc(_la_ws_state->tbufs, (n_tbuf + 1) * sizeof(struct tbuffer));
     if (temptbufs == NULL) {
         return -1;
     }
 
-    _la_ws_state->tbufs                = temptbufs;
-    _la_ws_state->tbufs[n_tbuf].tbuf     = malloc(0);
+    _la_ws_state->tbufs                 = temptbufs;
+    _la_ws_state->tbufs[n_tbuf].tbuf    = malloc(0);
     _la_ws_state->tbufs[n_tbuf].n_lines = 0;
 
     _la_ws_state->n_tbufs += 1;
@@ -106,10 +106,10 @@ void ws_tbuf_free(int tbufid)
 
 void ws_tbuf_aline(int tbufid, const char *str)
 {
-    struct tbuffer  *ctbuf = &_la_ws_state->tbufs[tbufid];
+    struct tbuffer *ctbuf = &_la_ws_state->tbufs[tbufid];
     struct string **temptbuftbuf =
         realloc(ctbuf->tbuf, (ctbuf->n_lines + 1) * sizeof(struct string *));
-    ctbuf->tbuf                = temptbuftbuf;
+    ctbuf->tbuf                 = temptbuftbuf;
     ctbuf->tbuf[ctbuf->n_lines] = malloc(sizeof(struct string));
     string_init(ctbuf->tbuf[ctbuf->n_lines]);
     WS_TBUF_OP(tbufid, ctbuf->n_lines, string_append, str);

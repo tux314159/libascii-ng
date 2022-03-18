@@ -18,8 +18,7 @@
  * Enum: driver_type
  * Enumerates driver types
  */
-enum driver_t
-{
+enum driver_t {
     VT100 = 1
 };
 
