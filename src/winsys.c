@@ -19,8 +19,6 @@ void ws_deinit(void)
             free(*r);
         }
         free(win.buffer);
-
-
     }
     llist_deinit(_la_ws_state->windows);
     free(_la_ws_state->windows);
