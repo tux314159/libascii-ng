@@ -22,9 +22,10 @@ static inline void msleep(long msec)
 int main(void)
 {
     char               c;
-    int                y0, y1, y2, y3, c1, c2;
+    int                c1, c2;
     struct llist_node *x0, *x1, *x2, *x3;
     (void)x0;
+    (void)x1;
 
     ll_init();
     rr_init();
@@ -32,7 +33,7 @@ int main(void)
     ll_stdin_nonblock();
     rr_curs_invis();
 
-    x0 = ws_frame_new(
+    x0 = ws_window_new(
         (struct screen_coord){0, 0},
         ll_scr_getsize(),
         NULL,
@@ -40,15 +41,8 @@ int main(void)
         ' ',
         ' ',
         ' ');
-    y0 = ws_tbuf_new();
-    ws_tbuf_aline(
-        y0,
-        "                     'h', 'j', 'k' and 'l' to move the window "
-        "left/down/up/right; 'w' and 's' to bring it forwards/backwards. 'q' "
-        "to quit.");
-    ws_frame_bind_tbuf(x0, y0);
 
-    x1 = ws_frame_new(
+    x1 = ws_window_new(
         (struct screen_coord){0, 0},
         (struct winsz){15, 3},
         NULL,
@@ -56,11 +50,8 @@ int main(void)
         '|',
         '-',
         '|');
-    y1 = ws_tbuf_new();
-    ws_tbuf_aline(y1, "Hello, world!");
-    ws_frame_bind_tbuf(x1, y1);
 
-    x2 = ws_frame_new(
+    x2 = ws_window_new(
         (struct screen_coord){20, 4},
         (struct winsz){20, 20},
         NULL,
@@ -68,14 +59,10 @@ int main(void)
         '|',
         '-',
         '|');
-    y2 = ws_tbuf_new();
-    ws_tbuf_aline(y2, "Whee!");
-    ws_tbuf_aline(y2, "How do you do?");
-    ws_frame_bind_tbuf(x2, y2);
 
     c1 = 3;
     c2 = 8;
-    x3 = ws_frame_new(
+    x3 = ws_window_new(
         (struct screen_coord){c1, c2},
         (struct winsz){25, 5},
         x2,
@@ -83,10 +70,6 @@ int main(void)
         '|',
         '-',
         '|');
-    y3 = ws_tbuf_new();
-    ws_tbuf_aline(y3, "");
-    ws_tbuf_aline(y3, "HALLO NIANNY!!! :DDDD");
-    ws_frame_bind_tbuf(x3, y3);
 
     do {
         ws_render();
@@ -106,20 +89,17 @@ int main(void)
             c1++;
             break;
         case 'w':
-            ws_frame_swapstackpos(x3, true);
+            ws_window_swapstackpos(x3, true);
             break;
         case 's':
-            ws_frame_swapstackpos(x3, false);
+            ws_window_swapstackpos(x3, false);
             break;
         default:
             break;
         }
-        ws_frame_mv(x3, (struct screen_coord){c1, c2});
+        ws_window_mv(x3, (struct screen_coord){c1, c2});
     } while (c != 'q');
 
-    ws_tbuf_free(y1);
-    ws_tbuf_free(y2);
-    ws_tbuf_free(y3);
     ws_deinit();
     rr_deinit();
     ll_deinit();

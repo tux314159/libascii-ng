@@ -2,33 +2,32 @@
 
 void ws_init(void)
 {
-    _la_ws_state           = malloc(sizeof(*_la_ws_state));
-    _la_ws_state->n_frames = 0;
-    _la_ws_state->n_tbufs  = 0;
-    _la_ws_state->frames   = malloc(sizeof(*_la_ws_state->frames));
-    llist_init(_la_ws_state->frames, sizeof(struct frame));
-    _la_ws_state->tbufs = malloc(0);
+    _la_ws_state          = malloc(sizeof(*_la_ws_state));
+    _la_ws_state->n_wins  = 0;
+    _la_ws_state->windows = malloc(sizeof(*_la_ws_state->windows));
+    llist_init(_la_ws_state->windows, sizeof(struct window));
 
     return;
 }
 
 void ws_deinit(void)
 {
-    llist_deinit(_la_ws_state->frames);
-    free(_la_ws_state->frames);
-    for (size_t i = 0; i < _la_ws_state->n_tbufs; i++) {
-        // can't just use ws_tbuf_free cos no guarantee it's contiguous
-        for (size_t j = 0; j < _la_ws_state->tbufs[i].n_lines; j++) {
-            string_deinit(_la_ws_state->tbufs[i].tbuf[j]);
-            free(_la_ws_state->tbufs[i].tbuf[j]);
+    for (struct llist_node *n = _la_ws_state->windows->head; n != NULL;
+         n                    = n->next) {
+        const struct window win = *(struct window *)n->data;
+        for (char **r = win.buffer; r < win.buffer + win.winsz.h; r++) {
+            free(*r);
         }
-        free(_la_ws_state->tbufs[i].tbuf);
+        free(win.buffer);
+
+
     }
-    free(_la_ws_state->tbufs);
+    llist_deinit(_la_ws_state->windows);
+    free(_la_ws_state->windows);
     free(_la_ws_state);
 }
 
-struct llist_node *ws_frame_new(
+struct llist_node *ws_window_new(
     struct screen_coord pos,
     struct winsz        winsz,
     struct llist_node  *stackpos,
@@ -37,172 +36,105 @@ struct llist_node *ws_frame_new(
     char                borderS,
     char                borderW)
 {
-    struct frame cframe;
+    struct window cwin;
 
-    cframe.pos        = pos;
-    cframe.winsz      = winsz;
-    cframe.boundtbuf  = -1;
-    cframe.activep    = true; /* active by default */
-    cframe.borders[0] = borderN;
-    cframe.borders[1] = borderE;
-    cframe.borders[2] = borderS;
-    cframe.borders[3] = borderW;
-    cframe.scroll_v   = 0;
-    cframe.scroll_h   = 0;
+    cwin.pos        = pos;
+    cwin.winsz      = winsz;
+    cwin.activep    = true; /* active by default */
+    cwin.borders[0] = borderN;
+    cwin.borders[1] = borderE;
+    cwin.borders[2] = borderS;
+    cwin.borders[3] = borderW;
 
-    _la_ws_state->n_frames += 1;
+    _la_ws_state->n_wins += 1;
 
-    return llist_addnode(_la_ws_state->frames, stackpos, &cframe);
-}
-
-void ws_frame_bind_tbuf(struct llist_node *frameptr, int tbufid)
-{
-    ((struct frame *)frameptr->data)->boundtbuf = tbufid;
-    return;
-}
-
-void ws_frame_mv(struct llist_node *frameptr, struct screen_coord pos)
-{
-    ((struct frame *)frameptr->data)->pos = pos;
-    return;
-}
-
-void ws_frame_rs(struct llist_node *frameptr, struct winsz ws)
-{
-    ((struct frame *)frameptr->data)->winsz = ws;
-    return;
-}
-
-int ws_tbuf_new(void)
-{
-    const size_t    n_tbuf = _la_ws_state->n_tbufs;
-    struct tbuffer *temptbufs =
-        realloc(_la_ws_state->tbufs, (n_tbuf + 1) * sizeof(struct tbuffer));
-    if (temptbufs == NULL) {
-        return -1;
+    cwin.buffer = malloc(winsz.h * sizeof(char *));
+    for (char **r = cwin.buffer; r < cwin.buffer + winsz.h; r++) {
+        // no, there is no missing null terminator
+        *r = calloc(winsz.w, sizeof(char));
     }
 
-    _la_ws_state->tbufs                 = temptbufs;
-    _la_ws_state->tbufs[n_tbuf].tbuf    = malloc(0);
-    _la_ws_state->tbufs[n_tbuf].n_lines = 0;
-
-    _la_ws_state->n_tbufs += 1;
-    return n_tbuf; /* our old copy */
+    return llist_addnode(_la_ws_state->windows, stackpos, &cwin);
 }
-
-void ws_tbuf_free(int tbufid)
+void ws_window_mv(struct llist_node *winptr, struct screen_coord pos)
 {
-    struct tbuffer *ctbuf = &_la_ws_state->tbufs[tbufid];
-    for (size_t i = 0; i < ctbuf->n_lines; i++) {
-        string_deinit(ctbuf->tbuf[i]);
-        free(ctbuf->tbuf[i]);
-    }
-
-    _la_ws_state->n_tbufs -= 1;
-    free(_la_ws_state->tbufs[tbufid].tbuf);
-
+    ((struct window *)winptr->data)->pos = pos;
     return;
 }
 
-void ws_tbuf_aline(int tbufid, const char *str)
+void ws_window_swapstackpos(struct llist_node *winptr, bool forward_p)
 {
-    struct tbuffer *ctbuf = &_la_ws_state->tbufs[tbufid];
-    struct string **temptbuftbuf =
-        realloc(ctbuf->tbuf, (ctbuf->n_lines + 1) * sizeof(struct string *));
-    ctbuf->tbuf                 = temptbuftbuf;
-    ctbuf->tbuf[ctbuf->n_lines] = malloc(sizeof(struct string));
-    string_init(ctbuf->tbuf[ctbuf->n_lines]);
-    WS_TBUF_OP(tbufid, ctbuf->n_lines, string_append, str);
-    ctbuf->n_lines += 1;
-
-    return;
-}
-
-void ws_frame_swapstackpos(struct llist_node *frameptr, bool forward_p)
-{
-    if (forward_p && frameptr->next) {
-        llist_nodeswap(_la_ws_state->frames, frameptr, frameptr->next);
-    } else if (!forward_p && frameptr->prev) {
-        llist_nodeswap(_la_ws_state->frames, frameptr, frameptr->prev);
+    if (forward_p && winptr->next) {
+        llist_nodeswap(_la_ws_state->windows, winptr, winptr->next);
+    } else if (!forward_p && winptr->prev) {
+        llist_nodeswap(_la_ws_state->windows, winptr, winptr->prev);
     }
 }
 
-void ws_frame_focus(struct llist_node *frameptr)
+void ws_window_focus(struct llist_node *winptr)
 {
-    _la_ws_state->focused_frame = frameptr;
+    _la_ws_state->focused_win = winptr;
 }
 
-/* Gets kinda ugly here */
-static void ws_render_1f(struct frame *cframe)
+static void ws_render_1f(struct window *cwin)
 {
-    /* Render a single frame */
-    const struct tbuffer *ctbuf;
+    /* Render a single window */
 
-    if (!cframe->activep) {
+    if (!cwin->activep) {
         return; /* don't render if not active */
     }
 
     /* blank the background for drawing */
-    for (int j = 1; j < cframe->winsz.w - 1; j++) {
-        for (int k = 1; k < cframe->winsz.h - 1; k++) {
+    for (int i = 1; i < cwin->winsz.w - 1; i++) {
+        for (int j = 1; j < cwin->winsz.h - 1; j++) {
             rr_scr_putc(
                 ' ',
-                (struct screen_coord){j + cframe->pos.x, k + cframe->pos.y});
+                (struct screen_coord){i + cwin->pos.x, j + cwin->pos.y});
         }
     }
 
     /* Next two loops render borders */
-    for (int j = 0; j < cframe->winsz.h; j++) { /* left & right */
+    for (int i = 0; i < cwin->winsz.h; i++) { /* left & right */
         rr_scr_putc(
-            cframe->borders[3],
-            (struct screen_coord){cframe->pos.x, cframe->pos.y + j});
+            cwin->borders[3],
+            (struct screen_coord){cwin->pos.x, cwin->pos.y + i});
         rr_scr_putc(
-            cframe->borders[1],
+            cwin->borders[1],
             (struct screen_coord){
-                cframe->pos.x + cframe->winsz.w - 1,
-                cframe->pos.y + j});
+                cwin->pos.x + cwin->winsz.w - 1,
+                cwin->pos.y + i});
     }
 
-    for (int j = 0; j < cframe->winsz.w; j++) { /* top & bottom */
+    for (int i = 0; i < cwin->winsz.w; i++) { /* top & bottom */
         rr_scr_putc(
-            cframe->borders[0],
-            (struct screen_coord){cframe->pos.x + j, cframe->pos.y});
+            cwin->borders[0],
+            (struct screen_coord){cwin->pos.x + i, cwin->pos.y});
         rr_scr_putc(
-            cframe->borders[2],
+            cwin->borders[2],
             (struct screen_coord){
-                cframe->pos.x + j,
-                cframe->pos.y + cframe->winsz.h - 1});
+                cwin->pos.x + i,
+                cwin->pos.y + cwin->winsz.h - 1});
     }
 
-    /* Render tbuffer */
-    if (cframe->boundtbuf == -1) {
-        return; /* nothing to look at here, move on! */
-    }
-    ctbuf = &_la_ws_state->tbufs[cframe->boundtbuf];
-    for (size_t j = 0; j < cframe->winsz.h; ++j) {
-        size_t jj = j + cframe->scroll_v;
-
-        if (jj >= ctbuf->n_lines) {
-            break;
+    /* Draw window contents */
+    for (int i = 0; i < cwin->winsz.h; i++) {
+        for (int j = 0; j < cwin->winsz.w; j++) {
+            rr_scr_putc(
+                cwin->buffer[i][j],
+                (struct screen_coord){
+                    cwin->pos.x + j + 1,
+                    cwin->pos.y + i + 1,
+                });
         }
-        rr_scr_puts_len(
-            ctbuf->tbuf[jj]->str,
-            (struct screen_coord){
-                cframe->pos.x + 1,
-                jj - cframe->scroll_v + cframe->pos.y + 1},
-            ctbuf->tbuf[j]->len < cframe->winsz.w - 2u ? ctbuf->tbuf[j]->len
-                                                       : cframe->winsz.w - 2u);
     }
 }
 
 void ws_render(void)
 {
-    const struct llist *frames     = _la_ws_state->frames;
-    struct llist_node  *cframecont = frames->head;
+    const struct llist *wins     = _la_ws_state->windows;
+    struct llist_node  *cwincont = wins->head;
 
-    TRAVERSE_LLIST(
-        cframecont,
-        ws_render_1f((struct frame *)(cframecont->data)));
+    TRAVERSE_LLIST(cwincont, ws_render_1f((struct window *)(cwincont->data)));
     rr_scr_render();
     return;
 }
