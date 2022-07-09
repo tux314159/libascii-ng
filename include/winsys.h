@@ -24,7 +24,7 @@ struct window {
     struct screen_coord pos;
     struct screen_coord oldpos;
     struct winsz        winsz;
-    char              **buffer;
+    char              **buffer; // terminated by a NULL pointer
 
     bool activep;
     char borders[4]; // NESW
@@ -32,13 +32,13 @@ struct window {
 
 /*
  * Function: ws_init
- * Initialises the windowing subsystem.
+ * Initialises the windowing subsystem
  */
 void ws_init(void);
 
 /*
  * Function: ws_deinit
- * Deinitialises the windowing subsystem.
+ * Deinitialises the windowing subsystem
  */
 void ws_deinit(void);
 
@@ -66,23 +66,33 @@ struct llist_node *ws_window_new(
 
 /*
  * Function: ws_window_mv
- * Moves a window to a new position.
+ * Moves a window to a new position
  * Parameters:
  *  windowid - id of the window to be moved
- *  pos     - position to move it to
+ *  pos      - position to move it to
  */
 void ws_window_mv(struct llist_node *windowptr, struct screen_coord pos);
 
 /*
  * Function: ws_window_swapstackpos
- * Moves a window in front or behind by one.
- * Does nothing if impossible.
+ * Moves a window in front or behind by one
+ * Does nothing if impossible
  *
  * Parameters:
  *  windowptr  - window to move
- *  forward_p - if true, moves in front; else, moves behind
+ *  forward_p  - if true, moves in front; else, moves behind
  */
 void ws_window_swapstackpos(struct llist_node *windowptr, bool forward_p);
+
+/*
+ * Function: ws_window_setbuf
+ * Sets the buffer of a window
+ *
+ * Parameters:
+ *  windowptr - window to edit
+ *  buffer    - buffer
+ */
+void ws_window_setbuf(struct llist_node *windowptr, char **buffer);
 
 /*
  * Function: ws_window_focus
